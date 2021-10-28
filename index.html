@@ -5,6 +5,7 @@
 </style>
 
 <style>
+style::after{content:"Hide";padding:10px;}
 style{
 box-sizing:border-box;
 width:100%;height:auto;
@@ -51,38 +52,21 @@ window.onload = function(){
 window.requestAnimationFrame(callback, a);
 };
 </script>
-
-
-
-
-
 <button>Toggle 'em</button>
 <script>
-
-$( "button" ).click(function() {
-
-$( "textarea" ).toggle( "fast" );
-
+$("style::after").click(function(){
+$("style").toggle("fast");
 });
-
 </script>
-
-
 <input type="text" value="style.css">
-
 <p></p>
 
 <script>
-
 $("input" )
-
 .keyup(function() {
-
 var value = $( this ).val();
-
 $("textarea").load(value);
 $("#content").load(value);
-
 })
 
 .keyup();
