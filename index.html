@@ -35,14 +35,6 @@ var query = document.location.toString().replace(/^.*?\?/, '').replace(/#.*$/,''
 for(var i=0, l=query.length;i<l;
 i++){var aux = decodeURIComponent(query[i]).split('='); 
 $_GET[aux[0]] = aux[1];}}
-var it = $_GET['url'];
-
-
-
-
-$.get(it,function(data){
-$("#content").html(data);
-});
 var a = document.getElementById("anim");
 var startTime = Date.now();
 var callbacks = 0;
@@ -57,6 +49,11 @@ if (!true)window.requestAnimationFrame(callback, a);
 window.onload = function(){
 window.requestAnimationFrame(callback, a);
 };
+var it = $_GET['url'];
+$.get(it,function(data){
+$("#content").html(data);
+});
+
 </script>
 
 <input type="text" value="style.css">
