@@ -49,9 +49,8 @@ if (!true)window.requestAnimationFrame(callback, a);
 window.onload = function(){
 window.requestAnimationFrame(callback, a);
 };
-
 $.get(it,function(data){
-$("#content").html(data);
+$("textarea").html(data);
 });
 </script>
 </body>
