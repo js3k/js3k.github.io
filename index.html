@@ -53,7 +53,6 @@ window.onload = function(){
 window.requestAnimationFrame(callback, a);
 };
 </script>
-<button>Toggle 'em</button>
 
 <input type="text" value="style.css">
 <p></p>
@@ -79,7 +78,8 @@ background-size:60px 60px;
 background-position: 0 0, 30px 30px;
 }</style>
 <script>
-$("style::after").click(function(){
+$("style::after").append("<button>Click</button>").html();
+$("button").click(function(){
 $("style").toggle("fast");
 });
 </script>
