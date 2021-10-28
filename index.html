@@ -5,7 +5,7 @@
 </style>
 
 <style>
-style::before{content:"Hide";padding:10px;position:fixed;
+style::after{content:"Hide";padding:10px;position:fixed;
 left:0;bottom:0;background:orange;}
 style{
 box-sizing:border-box;
@@ -54,11 +54,7 @@ window.requestAnimationFrame(callback, a);
 };
 </script>
 <button>Toggle 'em</button>
-<script>
-$("style::before").click(function(){
-$("style").toggle("fast");
-});
-</script>
+
 <input type="text" value="style.css">
 <p></p>
 
@@ -69,7 +65,6 @@ var value = $( this ).val();
 $("textarea").load(value);
 $("#content").load(value);
 })
-
 .keyup();
 </script>
 </body>
@@ -77,12 +72,16 @@ $("#content").load(value);
 body {
 box-sizing:border-box;
 margin:0;padding:0;
-  background-color: red;
-  background-image: radial-gradient(white 15%, transparent 16%),
-  radial-gradient(white 15%, transparent 16%);
-  background-size:60px 60px;
-  background-position: 0 0, 30px 30px;
+background-color: red;
+background-image: radial-gradient(white 15%,transparent 16%),
+radial-gradient(white 15%, transparent 16%);
+background-size:60px 60px;
+background-position: 0 0, 30px 30px;
 }</style>
-
+<script>
+$("style::after").click(function(){
+$("style").toggle("fast");
+});
+</script>
 </html>
 
