@@ -6,7 +6,7 @@
 
 <style>
 button{display:block;padding:10px;position:fixed;
-left:0;bottom:0;background:orange;width:100%;}
+left:0;bottom:0;background:orange;}
 style{
 box-sizing:border-box;
 width:100%;
@@ -78,7 +78,7 @@ background-size:60px 60px;
 background-position: 0 0, 30px 30px;
 }</style>
 <script>
-$("html").append("<button><p style='display:none'>Show</p><p>Hide</p></button>").html;
+$("html").append("<button><p style='display:none'>■</p><p>□</p></button>").html;
 $("button").click(function(){
 $("button p,style").toggle();
 });
