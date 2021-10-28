@@ -5,7 +5,6 @@
 </style>
 
 <style>
-p .show{display:none}
 button{padding:10px;position:fixed;
 left:0;bottom:0;background:orange;}
 style{
@@ -79,7 +78,7 @@ background-size:60px 60px;
 background-position: 0 0, 30px 30px;
 }</style>
 <script>
-$("html").append("<button><p id='show'>Show</p><p>Hide</p></button>").html;
+$("html").append("<button><p style='display:none'>Show</p><p>Hide</p></button>").html;
 $("button").click(function(){
 $("button p,style").toggle("fast");
 });
