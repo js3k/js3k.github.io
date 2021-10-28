@@ -1,0 +1,121 @@
+<!DOCTYPE html><html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1"><head><title>Test</title>
+<link rel="stylesheet" href="style.css">
+</style>
+
+<style>
+body{
+box-sizing:border-box;
+width:100%;height:10%;
+position:absolute;
+left:0;tip:0;
+  display:inline-block;
+  background: rgba(255, 255, 255,1);
+  font-family: monospace;
+  white-space:pre-wrap;
+  padding: 1em;
+margin:0;
+}
+style{
+box-sizing:border-box;
+width:100%;height:10%;
+position:absolute;
+right:0;bottom:0;
+  display:inline-block;
+  background: rgba(255, 255, 255,1);
+  font-family: monospace;
+  white-space:pre-wrap;
+  padding: 1em;
+margin:0;
+}
+</style>
+<script src="jquery.js"></script>
+</head><body contenteditable="true">
+
+
+
+
+<div id="banner"><div id="anim"></div></div>
+<pl></pl>
+<div id="content"></div>
+<textarea></textarea>
+
+
+
+
+<script>
+var $_GET = {};
+if(document.location.toString().indexOf('?') !== -1){
+var query = document.location.toString().replace(/^.*?\?/, '').replace(/#.*$/,'').split('&');
+for(var i=0, l=query.length;i<l;
+i++){var aux = decodeURIComponent(query[i]).split('='); 
+$_GET[aux[0]] = aux[1];}}
+var it = $_GET['url'];
+$("textarea").load(it);
+$("#content").load(it);
+var a = document.getElementById("anim");
+var startTime = Date.now();
+var callbacks = 0;
+function callback(){callbacks++;
+if(true)
+window.requestAnimationFrame(callback,a);
+
+time = Date.now();
+a.style.left= ((time - startTime)/50 % 340) + "px";
+if (!true)window.requestAnimationFrame(callback, a);
+}
+window.onload = function(){
+window.requestAnimationFrame(callback, a);
+};
+</script>
+
+
+
+
+
+<button>Toggle 'em</button>
+<script>
+
+$( "button" ).click(function() {
+
+$( "textarea" ).toggle( "fast" );
+
+});
+
+</script>
+
+
+<input type="text" value="style.css">
+
+<p></p>
+
+<script>
+
+$( "input" )
+
+.keyup(function() {
+
+var value = $( this ).val();
+
+$("textarea").load(value);
+$("#content").load(value);
+
+})
+
+.keyup();
+</script>
+</body>
+<style contenteditable="true">
+body {
+box-sizing:border-box;
+margin:0;padding:0;
+  background-color: red;
+  background-image: radial-gradient(white 15%, transparent 16%),
+  radial-gradient(white 15%, transparent 16%);
+  background-size:60px 60px;
+  background-position: 0 0, 30px 30px;
+}</style>
+
+</html>
+
