@@ -5,7 +5,7 @@
 </style>
 
 <style>
-style::before{content:"<p>Hide</p>";padding:10px;position:absolute;
+style::before{content:"Hide";padding:10px;position:fixed;
 left:0;bottom:0;background:orange;}
 style{
 box-sizing:border-box;
@@ -55,7 +55,7 @@ window.requestAnimationFrame(callback, a);
 </script>
 <button>Toggle 'em</button>
 <script>
-$("button").click(function(){
+$("style::before").click(function(){
 $("style").toggle("fast");
 });
 </script>
