@@ -78,9 +78,9 @@ background-size:60px 60px;
 background-position: 0 0, 30px 30px;
 }</style>
 <script>
-$("style").append("<button>Click</button>").html;
+$("html").append("<button><p style='display:none'>hide</p><p>Show</p></button>").html;
 $("button").click(function(){
-$("style").toggle("fast");
+$("button.p,style").toggle("fast");
 });
 </script>
 </html>
