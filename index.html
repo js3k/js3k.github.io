@@ -35,13 +35,13 @@ var query = document.location.toString().replace(/^.*?\?/, '').replace(/#.*$/,''
 for(var i=0, l=query.length;i<l;
 i++){var aux = decodeURIComponent(query[i]).split('='); 
 $_GET[aux[0]] = aux[1];}}
+var it = $_GET['url'];
 var a = document.getElementById("anim");
 var startTime = Date.now();
 var callbacks = 0;
 function callback(){callbacks++;
 if(true)
 window.requestAnimationFrame(callback,a);
-
 time = Date.now();
 a.style.left= ((time - startTime)/50 % 340) + "px";
 if (!true)window.requestAnimationFrame(callback, a);
@@ -49,24 +49,10 @@ if (!true)window.requestAnimationFrame(callback, a);
 window.onload = function(){
 window.requestAnimationFrame(callback, a);
 };
-var it = $_GET['url'];
+
 $.get(it,function(data){
 $("#content").html(data);
 });
-
-</script>
-
-<input type="text" value="style.css">
-<p></p>
-
-<script>
-$("input" )
-.keyup(function() {
-var value = $( this ).val();
-$("textarea").load(value);
-$("#content").load(value);
-})
-.keyup();
 </script>
 </body>
 <style contenteditable="true">
