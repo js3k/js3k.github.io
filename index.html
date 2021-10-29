@@ -24,9 +24,13 @@ margin:0;
 <script src="jquery.js"></script>
 </head><body>
 
-<div id="banner"><div id="anim"></div></div>
-<pl></pl>
 <div id="content" contenteditable="true"></div>
+<form action=".">
+  <label for="url">Url</label>
+  <input type="text" id="url" name="url">
+  <input type="submit" value="Submit">
+</form>
+
 
 <script>
 var $_GET = {};
@@ -36,41 +40,16 @@ for(var i=0, l=query.length;i<l;
 i++){var aux = decodeURIComponent(query[i]).split('='); 
 $_GET[aux[0]] = aux[1];}}
 var it = $_GET['url'];
-$("#anim::after").css("content:","memek").text();
-var a = document.getElementById("anim");
-var startTime = Date.now();
-var callbacks = 0;
-function callback(){callbacks++;
-if(true)
-window.requestAnimationFrame(callback,a);
-time = Date.now();
-a.style.left= ((time - startTime)/50 % 340) + "px";
-if (!true)window.requestAnimationFrame(callback, a);
-}
-window.onload = function(){
-window.requestAnimationFrame(callback, a);
-};
 $.get(it,function(data){
 $("#content").text(data);
 });
-
 </script>
 </body>
-<style contenteditable="true">
-body {
-box-sizing:border-box;
-margin:0;padding:0;
-background-color: red;
-background-image: radial-gradient(white 15%,transparent 16%),
-radial-gradient(white 15%, transparent 16%);
-background-size:60px 60px;
-background-position: 0 0, 30px 30px;
-}</style>
+
 <script>
 $("html").append("<button><p style='display:none'>□</p><p>■</p></button>").html;
 $("button").click(function(){
-$("button p,style").toggle();
+$("button p,form").toggle();
 });
 </script>
 </html>
-
