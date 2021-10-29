@@ -1,16 +1,9 @@
 <!DOCTYPE html><html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1"><head><title>js3k.github.io/?url=https://example.com</title>
-<link rel="stylesheet" href="style.css">
-</style>
 
 <style>
-form{padding:5px;position:fixed;
-left:50px;bottom:2px;background:;}
-button{font-size:120%;display:block;padding:5px;position:fixed;
-left:0;bottom:0;background:;}
-#content,
-style{
+#content{
 box-sizing:border-box;
 width:100%;
 position:relative;
@@ -21,17 +14,15 @@ font-family: monospace;
 white-space:pre-wrap;
 padding:1em;
 margin:0;
-}
-</style>
+}</style>
 <script src="jquery.js"></script>
 </head><body>
-
 <div id="content" contenteditable="true"></div>
-<form action=".">
-  <label for="url">Url</label>
-  <input type="text" id="url" name="url" value="https://">
-  <input type="submit" value="Submit">
-</form>
+
+
+
+
+
 
 
 <script>
@@ -46,12 +37,12 @@ $.get(it,function(data){
 $("#content").text(data);
 });
 </script>
-</body>
+
+
+
 
 <script>
 $("html").append("<button><p style='display:none'>□</p><p>■</p></button>").html;
 $("button").click(function(){
-$("button p,form").toggle();
-});
-</script>
-</html> 
+$("button p,#content").toggle();
+});</script></body></html> 
