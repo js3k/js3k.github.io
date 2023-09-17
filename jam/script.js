@@ -1,32 +1,67 @@
-$(document).ready(function() {
-  clockUpdate();
-  setInterval(clockUpdate, 1000);
-})
-
-function clockUpdate() {
-  var date = new Date();
-  $('.digital-clock').css({'color': '#fff', 'text-shadow': '0 0 6px #ff0'});
-  function addZero(x) {
-    if (x < 10) {
-      return x = '0' + x;
-    } else {
-      return x;
-    }
+var clock = {
+   
+  digits : ["zero", "one", "two", "three", "foure", "five", "six", "seven", "eight", "nine"],
+  
+  init : function(){
+    var $digit = $('.digit');
+    
+    // Ugly....
+    this.hour = [$($digit[0]), $($digit[1])];    
+    this.min  = [$($digit[2]), $($digit[3])];    
+    this.sec  = [$($digit[4]), $($digit[5])];
+    
+    
+    this.drawInterval(this.drawSecond, function(time){
+      return 1000 - time[3];
+    })
+    
+    this.drawInterval(this.drawMinute, function(time){
+      return 60000 - time[2] * 1000 - time[3];
+    })
+    
+      
+   this.drawInterval(this.drawHour, function(time){
+      return (60 - time[1]) * 60000 - time[2] * 1000 - time[3];
+    })        
+   
+  },
+  
+  getTimeArray : function(){
+    var dat = new Date();
+    return [dat.getHours(), dat.getMinutes(), dat.getSeconds(), dat.getMilliseconds()];
+  },
+    
+  drawInterval : function(func, timeCallback){
+    var time = this.getTimeArray();
+    
+    func.call(this, time);    
+    
+    var that = this;
+    setTimeout(function(){
+        that.drawInterval(func, timeCallback);      
+    }, timeCallback(time));
+  },
+    
+  drawHour : function(time){
+    this.drawDigits(this.hour, time[0]);  
+  },
+  
+  drawMinute : function(time){
+  	this.drawDigits(this.min,  time[1]);  
+  },
+  
+  drawSecond : function(time){  
+  	this.drawDigits(this.sec,  time[2]);
+  },
+  
+  drawDigits : function(digits, digit){
+    var ten = Math.floor(digit / 10);
+    var one = Math.floor(digit % 10);
+        
+    digits[0].attr('class', 'digit '+this.digits[ten]);
+    digits[1].attr('class', 'digit '+this.digits[one]);
   }
-
-  function twelveHour(x) {
-    if (x > 12) {
-      return x = x - 12;
-    } else if (x == 0) {
-      return x = 12;
-    } else {
-      return x;
-    }
-  }
-
-  var h = addZero(twelveHour(date.getHours()));
-  var m = addZero(date.getMinutes());
-  var s = addZero(date.getSeconds());
-
-  $('.digital-clock').text(h + ':' + m + ':' + s)
-}
+    
+}; 
+    
+clock.init();
