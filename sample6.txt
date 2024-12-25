@@ -1,0 +1,41 @@
+
+<style> 
+#myDIV {
+  width: 100%;
+  height: 100px;
+  background: orange;
+  position: relative;
+  font-size: 18px;
+  padding:16px;
+}
+@keyframes mymove {
+  from {top: 0px;}
+  to {top: 200px;}
+}
+</style>
+<div id="myDIV">Click me to start the animation.</div>
+
+<script>
+const div1 = $("myDIV");
+$(document).ready(function(){
+ $(div1).css("animation","mymove 4s 2");
+}
+$(div1).on("animationstart", myStartFunction);
+$(div1).on("animationiteration", myRepeatFunction);
+$(div1).on("animationend", myEndFunction);
+function myStartFunction(){
+$(this).html( "The animation has started");
+$(this).css("background","pink");
+}
+function myRepeatFunction() {
+  $(this).html( "The animation started again");
+$(this).css("background","lightblue");
+}
+function myEndFunction() {
+  $(this).html( "The animation has End");
+$(this).css("background","blue");
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<style> 
+#hasil{
+background:green;  
+position: relative;
+}
+#anim{
+background:gold;  
+position: relative;
+animation-name: anim;
+animation-duration: 4s;
+animation-direction: alternate;
+animation-iteration-count:infinite;
+animation-timing-function: linear;
+}
+@keyframes anim{
+from  {width:0px }
+to {width:200px }
+}
+</style>
+
+<h2>Jquery Event Animationiteration</h2>
+
+<div id="anim">CssAnimations.</div>
+<p id="dt">Text Hasil</p>
+<div id="hasil">EventAnimationiteration</div>
+
+
+<script>
+$(function(){
+$("#anim").on("animationiteration",function(){
+var val = $(this).css("width");
+$("p").text("Width:"+val);
+$("#hasil").css("width",val);
+});});
+</script>

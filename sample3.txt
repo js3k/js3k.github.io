@@ -1,0 +1,35 @@
+<style>
+div{
+position: absolute;
+background: linear-gradient(-35deg, red, green, blue);
+left: 33%;
+width: 100px;
+height: 200px;
+margin: 0;
+  }
+#left{
+position:fixed;
+left:30%;
+bottom:20px;
+padding:5px 10px;
+}
+#right{
+position:fixed;
+right:30%;
+bottom:20px;
+padding:5px 10px;
+}
+</style>
+<h3>Jquery .animation</h3>
+<div class="block"></div>
+<button id="left">&laquo;</button>
+<button id="right">&raquo;</button>
+
+<script>
+$( "#right" ).on( "click", function(){
+$( ".block" ).animate({ "left": "+=20px" }, "fast" );
+});
+$( "#left" ).on( "click", function(){
+$( ".block" ).animate({ "left": "-=20px" }, "fast" );
+});
+</script>

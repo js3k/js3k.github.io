@@ -1,0 +1,13 @@
+<h2>Jquery Get The BackgroundColor</h2>
+<p style="background-color:#ff0000">This is a paragraph.</p>
+<p style="background-color:#00ff00">This is a paragraph.</p>
+<p style="background-color:#0000ff">This is a paragraph.</p>
+<button>Return background-color of p</button>
+
+<script>
+$(document).ready(function(){
+$("button").click(function(){
+alert("Background color = " + $("p").css("background-color"));
+});
+});
+</script>

@@ -1,0 +1,71 @@
+<style>
+:root{
+	--s: 40px;
+	--t: 1px;
+	background: linear-gradient(
+		180deg,
+		#051937,
+		#004d7a,
+		#008793,
+		#00bf72,
+		#a8eb12
+	);
+	overflow: hidden;
+	height: 100%;
+
+	&::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(0deg, #051937, #008793, #00bf72, #a8eb12);
+		border-radius: 50%;
+		width: 50%;
+		max-width: 500px;
+
+		aspect-ratio: 1;
+		z-index: -1;
+		margin: auto;
+		-webkit-mask-image: linear-gradient(0deg, transparent 50%, black);
+		        mask-image: linear-gradient(0deg, transparent 50%, black);
+	}
+}
+html{
+	color: #fff;
+	height: 100%;
+	perspective: 650px;
+	-webkit-mask-image: linear-gradient(transparent calc(50% + var(--s)), black);
+	        mask-image: linear-gradient(transparent calc(50% + var(--s)), black);
+	margin: 0;
+}
+
+body{
+	width: 200%;
+	min-width: 700px;
+	aspect-ratio: 1;
+	background: linear-gradient(currentColor var(--t), transparent 0),
+		linear-gradient(90deg, currentColor var(--t), transparent 0);
+	background-size: var(--s) var(--s);
+	position: relative;
+	-webkit-animation: translate 3s infinite linear;
+	        animation: translate 3s infinite linear;
+	transform-origin: top;
+	position: absolute;
+	inset: 0;
+	top: 45%;
+	rotate: x 77.5deg;
+	left: -50%;
+	scale: 1.15;
+}
+
+@-webkit-keyframes translate {
+	from {
+		transform: translateY(calc(var(--s) * -1));
+	}
+}
+
+@keyframes translate {
+	from {
+		transform: translateY(calc(var(--s) * -1));
+	}
+}
+</style>

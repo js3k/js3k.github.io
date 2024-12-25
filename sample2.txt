@@ -1,0 +1,25 @@
+<h2>Jquery WindowWidth</h2>
+
+<button id="getp">Text.Width</button>
+<button id="getd">Document.W</button>
+<button id="getw">Window.W</button>
+
+<div>&nbsp;</div>
+<p>Jquery Get WindowWidth </p>
+
+<script>
+function sw(ele,w){
+$("div").text("ini"+ele+w);
+}
+$("#getp").on("click",function(){
+sw("paragraph",$("h2").width());
+});
+
+$("#getd").on("click",function(){
+sw("document",$(document ).width());
+});
+
+$("#getw").on("click",function(){
+sw("window",$(window).width());
+});
+</script>

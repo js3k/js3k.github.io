@@ -1,0 +1,36 @@
+<style> 
+#anim{
+  width: 200px;
+  height: 80px;
+  position: relative;
+  background-color:#bbb;
+  animation-name: mymove;
+  animation-duration: 0.3s;
+  animation-iteration-count:infinie;
+}
+@keyframes mymove {
+  from {color:red;}
+  to {color:green;}
+}
+</style>
+
+
+<iframe id="view"></iframe>
+<textarea id="anim" rows="5" cols="20">
+</textarea>
+
+
+
+<script>
+$(function(){
+$("#anim").on("animationiteration",function(){var val = $(this).val();
+
+$("#view").attr("srcdoc",val);
+});}).trigger("animationiteration");
+</script>
+
+
+
+
+</body>
+</html>
