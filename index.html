@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-<title>Js Tester js3k.github.io</title>
+<title>Js Tester - Js3k.github.io</title>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
 :root{
+font-family: Arial, Helvetica, sans-serif;
 margin:0;
 padding:0;
 }
@@ -27,24 +29,94 @@ margin:0;
 border:none;
 border-bottom:1px solid #c0c0c0;
 }
-.text{
+#edit{
 white-space: pre-line;
 position:sticky;
-background:#c0c0c0;
 left:0;top:0;
 z-index:1;
-padding:5px;
+padding:10px;
 margin:0;
-color:#0c0c0c;
+text-overflow: ellipsis;
 font-family: Arial, Helvetica, sans-serif;
 border:5px double #909090;
-
 }
 .footer{
 padding:0;
 margin:0;
 color:#0b0b0b;
 }
+.light{color:#ccc;background-color:#404040}
+.black{color:#ccc;background-color:rgba(0,0,0,0.5)}
+
+
+/* The container */
+.container {
+  display: inline-block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 18px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #2196F2;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
 </style>
 <script src="jquery.js"></script>
 </head><body>
@@ -52,28 +124,35 @@ color:#0b0b0b;
 <iframe id="view"></iframe>
  &nbsp; 
  <select id="url" name="on" style="width:80px;padding:4px 0 3px 0;background:#d0d0d0;">
-<option value="0">Via Url --> </option>
-<option value="1">sample 1</option>
-<option value="2">sample 2</option>
-<option value="3">sample 3</option>
-<option value="4">sample 4</option>
-<option value="5">sample 5</option>
-<option value="6">sample 6</option>
-<option value="7">sample 7</option>
-<option value="8">sample 8</option>
-<option value="9">sample 9</option>
-<option value="10">sample 10</option>
-<option value="11">sample 11</option>
+<option value="0">From Url --> </option>
+<option value="1">Example 1</option>
+<option value="2">Example 2</option>
+<option value="3">Example 3</option>
+<option value="4">Example 4</option>
+<option value="5">Example 5</option>
+<option value="6">Example 6</option>
+<option value="7">Example 7</option>
+<option value="8">Example 8</option>
+<option value="9">Example 9</option>
+<option value="10">Example 10</option>
+<option value="11">Example 11</option>
 </select> &nbsp;
  <input id="urli" type="text" value="https://js3k.github.io/welcom.html" style="width:120px;height:22px;background:#d0d0d0;">
- &nbsp; Text<input type="checkbox" id="btc">w
-<textarea id="edit" class="text">
+ &nbsp;  W
+<label class="container">
+  <input type="checkbox" id="btc">
+  <span class="checkmark"></span>
+</label>E
+<label class="container">
+  <input type="checkbox" id="bta">
+  <span class="checkmark"></span>
+</label>
+
+<textarea id="edit">
 </textarea>
- <div class="footer"><h4 style="margin:0;padding:4px;">&copy;js3k.github.io</h4> <h6 style="margin:0;padding:5px;">Note.! If you use the sample code, first insert a space or new line. in the textarea, to activate javascript. And do not refresh the page.</div>
+ <div class="footer"><h4 style="margin:0;padding:4px;">&copy; JS3K.GITHUB.IO</h4> <h6 style="margin:0;padding:5px;">Note.! If you use the sample code, first insert a space or new line. in the textarea, to activate javascript. And do not refresh the page.</div>
 </h6>
 
-
-</html>
 <script>
 var doc='<!DOCTYPE html><html lang="eb"><head>';
 var meta='<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">';
@@ -83,8 +162,8 @@ $(function(){
 $("#url").on("change",function(){
 var no = $(this).val();
 if(no=="0"){
-$("#urli").keyup(function(){
-var urli = $( this ).val();
+$( "#urli" ).keyup(function(){
+var urli = $(this).val();
 $.get(urli,function(d0){
 $("#edit").val(d0);
 $("#view").attr("srcdoc",d0);
@@ -159,18 +238,31 @@ $("#view").attr("srcdoc",value);
 $( "#btc" ).change(function(){
 var btc = $( this ).is( ":checked" )+"";
 if(btc=="true"){
-var tw = $(window).width()+200;
-$("textarea").width(tw+"px");
-$("textarea").attr("rows","10");
+var tw = $(window).width()+300;
+$("#edit").width(tw+"px");
+$("#edit").attr("rows","10");
 }
 else if(btc=="false"){
-var tw = $(window).width()-20;
-$("textarea").width(tw+"px");
-$("textarea").attr("rows","10");
+var tw = $(window).width()-30;
+$("#edit").width(tw+"px");
+$("#edit").attr("rows","10");
 }
 }).trigger("change");
+
+$( "#bta" ).change(function(){
+var bta = $( this ).is( ":checked" )+"";
+if(bta=="true"){
+$("#edit").removeClass("black").addClass("light");
+$("#edit").prop('disabled', false);}
+else if(bta=="false"){
+$("#edit").prop('disabled', true);
+$("#edit").addClass("black").removeClass("light");
+}
+}).trigger("change");
+
 </script>
-</body>
+
+
 <script type="text/javascript">
 document.addEventListener('touchstart', function(e) {
 if (e.touches.length > 1){
@@ -197,8 +289,16 @@ var t2 = e.timeStamp
 ,dt = t2 - t1 
 ,fingers = e.originalEvent.touches.length;
 $(this).data('lastTouch', t2);
-if (!dt || dt > 200 || fingers > 1) return;
+if (!dt || dt > 400 || fingers > 1) return;
 e.preventDefault();
 $(this).trigger('click').trigger('click');
 });};})(jQuery);
 </script>
+
+<script type="text/javascript">
+window.onbeforeunload = function(){
+return "Dude, are you sure you want to leave? Think of the kittens!";
+}
+</script>
+</body>
+</html>
