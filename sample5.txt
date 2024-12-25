@@ -3,7 +3,7 @@
 'use strict';
 const canvas = document.getElementsByTagName('canvas')[0];
 canvas.width = canvas.clientWidth;
-canvas.height = canvas.clientHeight;
+canvas.height = canvas.clientHeight+150;
 
 let config = {
   TEXTURE_DOWNSAMPLE: 1,
