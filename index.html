@@ -83,13 +83,12 @@ $(function(){
 $("#url").on("change",function(){
 var no = $(this).val();
 if(no=="0"){
-$( "#urli" ).keyup(function(u){
+$("#urli").keyup(function(){
 var urli = $( this ).val();
 $.get(urli,function(d0){
 $("#edit").val(d0);
 $("#view").attr("srcdoc",d0);
 });
-$("i").text("Source From: "+value);
 }).keyup();
 }
 else if(no=="1"){
