@@ -2,7 +2,6 @@
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
 <title>Js Tester - Js3k.github.io</title>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
 :root{
 font-family: Arial, Helvetica, sans-serif;
@@ -14,15 +13,12 @@ background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
 }
 body{
 box-sizing:order-box;
-background:#909090;
 color:#d0d0d0;
 padding:0;
 margin:0;
-border:1px solid #c0c0c0;
 }
 iframe{
 width:100%;
-height:18em;
 box-sizing:border-box;
 padding:0;
 margin:0;
@@ -39,6 +35,9 @@ margin:0;
 text-overflow: ellipsis;
 font-family: Arial, Helvetica, sans-serif;
 border:5px double #909090;
+-moz-box-sizing: border-box;
+-webkit-box-sizing: border-box;
+box-sizing: border-box;
 }
 .footer{
 padding:0;
@@ -121,6 +120,88 @@ color:#0b0b0b;
 <script src="jquery.js"></script>
 </head><body>
 
+<style>
+/* The container */
+.fpv{
+background-color: #000;
+border:2px solid #000;
+opacity: 0.4;
+display:block;
+position:fixed;
+left:0px;top:0px;
+padding:5px;
+margin-bottom: 24px;
+cursor: pointer;
+font-size: 16px;
+color:#aaa;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.fpv:after{
+content: "Full View";
+margin-left:28px;
+}
+/* Hide the browser's default checkbox */
+.fpv input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 28px;
+  width: 28px;
+  background-color: #aaa;
+}
+
+/* On mouse-over, add a grey background color */
+.fpv:hover input ~ .checkmark {
+  background-color: #aaa;
+}
+
+/* When the checkbox is checked, add a blue background */
+.fpv input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.fpv input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.fpv .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+</style>
+
+<label class="fpv">
+  <input type="checkbox" id="fpv">
+  <span class="checkmark"></span>
+</label>
 <iframe id="view"></iframe>
  &nbsp; 
  <select id="url" name="on" style="width:80px;padding:4px 0 3px 0;background:#d0d0d0;">
@@ -144,14 +225,15 @@ color:#0b0b0b;
   <span class="checkmark"></span>
 </label>E
 <label class="container">
-  <input type="checkbox" id="bta">
+  <input type="checkbox" id="bta" checked>
   <span class="checkmark"></span>
 </label>
 
-<textarea id="edit">
-</textarea>
- <div class="footer"><h4 style="margin:0;padding:4px;">&copy; JS3K.GITHUB.IO</h4> <h6 style="margin:0;padding:5px;">Note.! If you use the sample code, first insert a space or new line. in the textarea, to activate javascript. And do not refresh the page.</div>
-</h6>
+<textarea id="edit" autofocus></textarea>
+
+<div class="footer"><h4 style="margin:0;padding:4px;">&copy; JS3K.GITHUB.IO</h4>
+<h6 style="margin:0;padding:5px;">Note.! If you use the sample code, first insert a space or new line. in the textarea, to activate javascript. And do not refresh the page.</h6></div>
+
 
 <script>
 var doc='<!DOCTYPE html><html lang="eb"><head>';
@@ -226,26 +308,29 @@ $("#edit").val(d11);
 $("#view").attr("srcdoc",d11);});
 }
 else{''}
+}).trigger("change");});
 
+$( "#btc" ).change(function(){
+var btc = $( this ).is( ":checked" )+"";
+if(btc=="true"){
 $("#edit").on("keyup", function(){
 this.style.height = "auto";
 this.style.height = this.scrollHeight + 1 + "px";
 var value = doc+meta+title+$(this).val()+foot ;
 $("#view").attr("srcdoc",value);
 }).trigger("keyup");
-}).trigger("change");});
-
-$( "#btc" ).change(function(){
-var btc = $( this ).is( ":checked" )+"";
-if(btc=="true"){
 var tw = $(window).width()+300;
 $("#edit").width(tw+"px");
-$("#edit").attr("rows","10");
+$("#edit").prop("rows","10");
 }
 else if(btc=="false"){
+$("#edit").on("keyup", function(){
+var value = doc+meta+title+$(this).val()+foot ;
+$("#view").attr("srcdoc",value);
+}).trigger("keyup");
 var tw = $(window).width()-30;
 $("#edit").width(tw+"px");
-$("#edit").attr("rows","10");
+$("#edit").prop("rows","10");
 }
 }).trigger("change");
 
@@ -260,40 +345,24 @@ $("#edit").addClass("black").removeClass("light");
 }
 }).trigger("change");
 
+$( "#fpv" ).change(function(){
+var fpv = $( this ).is( ":checked" )+"";
+if(fpv=="true"){
+$("iframe").removeClass("d").addClass("full");
+var ih = $(window).height();
+$(".full").css("height",ih+"px");
+}
+else if(fpv=="false"){
+$("iframe").addClass("d").removeClass("full");
+var iw = $(window).width()-50;
+$(".d").css("height",iw+"px");
+}
+}).trigger("change");
+
 </script>
 
 
-<script type="text/javascript">
-document.addEventListener('touchstart', function(e) {
-if (e.touches.length > 1){
-e.preventDefault();
-}},{ passive: false });
-document.addEventListener('gesturestart', function(e){
-e.preventDefault();
-},{passive: false});
-</script>
-<script type="text/javascript">
-$(document).keydown(function(event) {
-if (event.ctrlKey==true && (event.which == '61' || event.which == '107' || event.which == '173' || event.which == '109'  || event.which == '187'  || event.which == '189'  ) ){
-event.preventDefault();
-}});
-$(window).bind('mousewheel DOMMouseScroll',function(event){
-if(event.ctrlKey == true){event.preventDefault();
-}});
-document.body.addEventListener("wheel", e=>{
-if(e.ctrlKey)e.preventDefault();});
-(function($){<$.fn.nodoubletapzoom = function(){
-$(this).bind('touchstart', function preventZoom(e){
-var t2 = e.timeStamp
-,t1 = $(this).data('lastTouch') || t2 
-,dt = t2 - t1 
-,fingers = e.originalEvent.touches.length;
-$(this).data('lastTouch', t2);
-if (!dt || dt > 400 || fingers > 1) return;
-e.preventDefault();
-$(this).trigger('click').trigger('click');
-});};})(jQuery);
-</script>
+
 
 <script type="text/javascript">
 window.onbeforeunload = function(){
