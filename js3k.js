@@ -29,7 +29,7 @@ top:10px;right:3%;z-index:1;display:inline-block;transition:0.5s;
 </style>
 <input id="btn" type="checkbox">
 <label for="btn" class="btn"></label>
-<div id="menu"><h1 class="ht"><a href="#">urln.github.io</a></h1></div>
+<div id="menu"><h1 class="ht"><a href="#">js3k.github.io</a></h1></div>
 `;
 document.body.insertAdjacentHTML("beforeend", buttonM);
 
@@ -68,7 +68,7 @@ fetch(url)
     data.forEach((item) => {
       const oSt = `${item.html_url}`;
       const nSt = oSt.replace(
-        /https:\/\/github.com\/urln\/urln.github.io\/blob\/main\/post\//g,
+        /https:\/\/github.com\/js3k\/js3k.github.io\/blob\/main\/data\//g,
         ""
       );
       const eNs = nSt.replace(/.html|.css|.js|.txt|.md|.png/g, "");
