@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+<title>SvgEditor</title>
+    <style>
+        :root, html, body {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+        body {
+        	overflow:scroll;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+        input {
+        	width:100%;
+            margin: 0;
+            padding: 5px 0;
+        }
+        #svg{
+            border: 2px solid  #007BFF;
+            box-sizing: border-box;
+        }
+
+#download{
+	width:100%;
+            display: block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+
+
+/* Hide the checkbox */
+        #toggle {
+            display: none;
+        }
+      #reset{
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        /* Style the label to look like a button */
+      .toggle-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Content to show/hide */
+        .toggle-content {
+        	
+        	box-sizing: border-box;
+        	width:100%;
+            display: none;
+            margin:0px;
+            padding: 10px;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
+        }
+
+        /* Show content when checkbox is checked */
+        #toggle:checked + .toggle-label + .toggle-content {
+            display: block;
+        }
+
+</style>
+    <script src="../jquery.js"></script>
+</head>
+<body>
+ <div id="kontent" style="overflow: hidden; position: relative;">
+    <svg id="svg" width="500" height="500">
+        <path id="path" stroke="red" stroke-width="10" fill="none"/>
+        <circle id="circle" cx="0" cy="0" r="10" fill="green">
+            <animateMotion dur="8" repeatCount="indefinite">
+                <mpath href="#path" />
+            </animateMotion>
+        </circle>
+    </svg>
+</div>
+
+<button id="reset" style="position: fixed; right: 0; bottom: 0; z-index: 1;">Reset Ulang</button>
+<input type="checkbox" id="toggle">
+<label for="toggle" class="toggle-label" style="position: fixed; left: 0; bottom: 0; z-index: 1;">Peralatn</label>
+
+<div id="tools" class="toggle-content" style="overflow: hidden; position: fixed; left: 0; top: 0; z-index: 1;">
+    
+<div class="range-slider">
+        svg width: <span class="range-value">500</span> 
+        <input class="input-range" type="range" id="svgWidth" value="500" min="1" max="2000">
+    </div>
+    <div class="range-slider">
+        svg height: <span class="range-value">500</span> 
+        <input class="input-range" type="range" id="svgHeight" value="500" min="1" max="2000">
+    </div>
+    <div class="range-slider">
+        line size: <span class="range-value">10</span>
+        <input class="input-range" type="range" id="pathStroke" value="10" min="1" max="200">
+    </div>
+    <div class="range-slider">
+        circle size: <span class="range-value">10</span>
+        <input class="input-range" type="range" id="circleR" value="10" min="1" max="200">
+    </div>
+    <br/>
+    <button id="download">Download SVG</button>
+</div>
+<script>
+$('.input-range').on('input', function(){
+    $(this).prev('.range-value').text(this.value);
+});
+
+$(document).ready(function() {
+    const $svg = $('#svg');
+    const $path = $('#path');
+    const $circle = $('#circle');
+    const $download = $('#download');
+    let isDrawing = false; 
+    let pathData = '';
+
+    const temp = (svgWidth, svgHeight, pathStroke, circleR) => `
+        <svg xmlns="http://www.w3.org/2000/svg" width="${svgWidth}" height="${svgHeight}">
+            <path id="path" stroke="red" stroke-width="${pathStroke}" fill="none" d="${pathData}" />
+            <circle cx="0" cy="0" r="${circleR}" fill="green">
+                <animateMotion dur="8s" repeatCount="indefinite">
+                    <mpath href="#path" />
+                </animateMotion>
+            </circle>
+        </svg>`;
+
+    $('#reset').click(function() { 
+        pathData = '';
+        $path.attr('d', ''); 
+    });
+
+    const startDrawing = (event) => {
+        isDrawing = true; 
+        const touch = event.originalEvent.touches ? event.originalEvent.touches[0] : event;
+        pathData += `M ${touch.clientX} ${touch.clientY}`; 
+        $path.attr('d', pathData); 
+        event.preventDefault(); 
+    };
+
+    const draw = (event) => {
+        if (!isDrawing) return; 
+        const touch = event.originalEvent.touches ? event.originalEvent.touches[0] : event;
+        pathData += ` L ${touch.clientX} ${touch.clientY}`; 
+        $path.attr('d', pathData); 
+    };
+
+    const stopDrawing = () => { isDrawing = false; };
+
+    $svg.on('touchstart mousedown', startDrawing);
+    $svg.on('touchmove mousemove', draw);
+    $svg.on('touchend touchcancel mouseup mouseleave', stopDrawing);
+
+    $('#svgWidth').on('input', function() { $svg.attr('width', this.value); });
+    $('#svgHeight').on('input', function() { $svg.attr('height', this.value); });
+    $('#pathStroke').on('input', function() { $path.attr('stroke-width', this.value); });
+    $('#circleR').on('input', function() { $circle.attr('r', this.value); });        
+
+    $download.on('click', () => {
+        const svgWidth = $('#svgWidth').val();  
+        const svgHeight = $('#svgHeight').val(); 
+        const pathStroke = $('#pathStroke').val();
+        const circleR = $('#circleR').val();    
+        const svgContent = temp(svgWidth, svgHeight, pathStroke, circleR);
+
+        const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        const $a = $('<a>').attr('href', url).attr('download', 'image.svg').appendTo('body'); 
+        $a[0].click(); 
+        $a.remove(); 
+        URL.revokeObjectURL(url); 
+    });
+});
+</script>
+</body>
+</html>

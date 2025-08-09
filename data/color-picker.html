@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gradient Color Picker with Canvas</title>
+    <style>
+body {margin:0;padding:0 0.7em;padding-top:1em;font-family: Arial, sans-serif;}
+canvas{margin:10px 0;padding:0;}
+#colorInput,button{border:1px solid silver;margin:0 10px;padding:5px;}
+    </style>
+</head>
+<body>
+<h3>Color Picker</h3>
+<canvas id="gradientCanvas" width="350" height="100"></canvas>
+<br/>
+<input type="color" id="colorInput" value="#006060">
+<button onclick="copyHex()"><span id="hexOutput">#006060</span></button>
+
+<button onclick="copyRgb()"><span id="colorOutput">rgb(255,255,255)</span></button> 
+
+
+<script>
+const canvas = document.getElementById('gradientCanvas');
+const ctx = canvas.getContext('2d');
+const colorOutput = document.getElementById('colorOutput');
+const hexOutput = document.getElementById('hexOutput');
+const colorInput = document.getElementById('colorInput');
+const copyButton = document.getElementById('copyButton');
+
+function change() {
+    const colin = colorInput.value;
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+    gradient.addColorStop(0, 'rgb(255,255,255)');
+    gradient.addColorStop(0.5, colin);
+    gradient.addColorStop(1, 'rgb(0,0,0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    document.body.style.backgroundColor = colin;
+    hexOutput.textContent = colin;
+}
+colorInput.addEventListener('input', change);
+
+change();
+
+function rgbToHex(r, g, b) {
+    const toHex = (c) => {
+        const hex = c.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+    };
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+function getColorFromTouch(x, y) {
+    const colorData = ctx.getImageData(x, y, 1, 1).data;
+    return colorData; 
+}
+
+function handleColorSelection(x, y) {
+    const colorData = getColorFromTouch(x, y);
+    const rgbColor = `rgb(${colorData[0]}, ${colorData[1]}, ${colorData[2]})`;
+    const hexColor = rgbToHex(colorData[0], colorData[1], colorData[2]);
+    colorOutput.textContent = rgbColor;
+    hexOutput.textContent = hexColor;
+    document.body.style.backgroundColor = hexColor;
+}
+
+// Event listener untuk touchstart
+canvas.addEventListener('touchstart', function(event) {
+    event.preventDefault();
+    const touch = event.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    handleColorSelection(x, y);
+});
+
+// Event listener untuk touchmove
+canvas.addEventListener('touchmove', function(event) {
+    event.preventDefault();
+    const touch = event.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+    handleColorSelection(x, y);
+});
+
+// Event listener untuk mousedown
+canvas.addEventListener('mousedown', function(event) {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    handleColorSelection(x, y);
+});
+
+// Event listener untuk mousemove
+canvas.addEventListener('mousemove', function(event) {
+    if (event.buttons === 1) { // Cek jika tombol mouse ditekan
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        handleColorSelection(x, y);
+    }
+});
+
+// Event listener untuk mouseup
+canvas.addEventListener('mouseup', function(event) {
+    // Anda bisa menambahkan logika tambahan di sini jika diperlukan
+});
+
+function copyHex() {
+    var range = document.createRange();
+    range.selectNode(hexOutput);
+    window.getSelection().removeAllRanges(); 
+    window.getSelection().addRange(range); 
+    document.execCommand("copy");
+    window.getSelection().removeAllRanges();
+    alert("Color: "+hexOutput.textContent+" Add to clipboard");
+ }
+ function copyRgb() {
+    var range = document.createRange();
+    range.selectNode(colorOutput);
+    window.getSelection().removeAllRanges(); 
+    window.getSelection().addRange(range); 
+    document.execCommand("copy");
+    window.getSelection().removeAllRanges();
+    alert("Color: "+colorOutput.textContent +" Add to clipboard");
+ }
+</script>
+</body>
+</html>
