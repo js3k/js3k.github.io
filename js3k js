@@ -49,7 +49,7 @@ divE.style.fontFamily = "sans-serif";
 divE.style.margin = "0";
 divE.style.padding = "0";
 
-const url = `https://api.github.com/repos/urln/urln.github.io/contents/post`;
+const url = `https://api.github.com/repos/js3k/js3k.github.io/contents/data`;
 fetch(url)
   .then((response) => {
     if (!response.ok) {
