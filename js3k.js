@@ -78,7 +78,7 @@ fetch(url)
       li.style.padding = "5px";
       li.style.border = "4px solid #ddd";
       li.style.borderRadius = "";
-      li.innerHTML = `<a style="font-family:monospace;color:#123456" href="post/${eNs}.html">${eNs}</a> 
+      li.innerHTML = `<a style="font-family:monospace;color:#123456" href="data/${eNs}.html">${eNs}</a> 
                             <a style="float:right;color:#456789" href="${item.download_url}">raw</a>`;
       ul.appendChild(li);
     });
