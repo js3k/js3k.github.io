@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang='ID'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+    <title>Andigo Blog</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.text{width:100%;flex:1;margin:4px 0; padding:6px;border:1px solid #ccc;text-align:left;}
+.button{background:rgba(0,0,0,0.7); color: silver;border-radius:8px;display:inline-block;flex:1;text-decoration:none;width:100%;margin:4px 0; padding:8px;border:1px solid #ccc;text-align:center;}
+.btna{background:rgba(0,0,0,0.7); color: silver;border-radius:8px;text-decoration:none;width:100%;margin:0; padding:8px;border:1px solid #ccc;text-align:center;}
+li {background:rgba(0,0,0,0.7); color: silver; list-style:none; padding:8px; cursor: pointer; margin: 0; border-bottom:1px dashed #bbb; }
+.selected {background:#fff;color:red;}
+h4,p{padding:8px;border:5px dashed #ccc;border-left:0;border-right:0;display:block}
+p a{text-decoration:none; color:red;}
+p span{font-size:12px}
+#konfirm{background:rgba(0,0,0,0.9); position:fixed;left:0;top:0;width:100%;height:100%;z-index:10;padding-top:40%;}
+.show{display:block;text-decoration:none; color:red;}
+.hidd{display:none}
+h6{font-size:18px;margin:20px 0;padding:10px;text-align:center;display:block}
+nav,.btn{display:flex;margin:0;padding:0;}
+.nava{display:flex;margin:0;padding:0;border:4px dashed #ccc;border-left:0;border-right:0;}
+nav a{flex:1}
+nav a {border:1px solid #bbb;text-align:center;margin:0; padding:8px; text-decoration: none; color: teal; }
+:root{width:100vw;height:100vh;left:0;margin:0;padding: 0; overflow:hidden;}
+body{background:#fff;width:100vw;height:100vh;border:4px dashed #ccc;margin:0;padding: 0; font-family: sans-serif; overflow:scroll;}
+.container{display:flex;width:140vw;height:100%;}
+.left{flex:3;width:100%;display: flex;flex-direction: column;background-color: #f0f0f0;overflow:auto;}
+.right{flex:2;width:100%;display: flex;flex-direction: column;background-color: #f0f0f0;background:#f0f0f2;height:100%;overflow:auto;border-left:4px dashed #ccc;}
+.iframe {width: 100%; height:100%;border:none;}
+.textarea{width: 100%; height:100%;background:#efefef;white-space:nowrap; overflow:scroll; padding:10px;border:none;outline:none; }
+ul{height:100%;overflow:scroll;}
+</style>
+</head><body>
+<div id="konfirm" class="hidd">
+<div style="background-color:#fff3cd; color:#856404; padding:12px; border:1px solid #ffeeba; border-radius:6px; font-family:sans-serif;">
+<strong>Sebentar 🖐 Apakah file yang ingin anda hapus, Anda sendiri yang menulis nya ?</strong>
+Jika iya laku kan lah 💖 dengan senang hati
+<strong>Tapi jika file yang ingin anda hapus bukan milik anda,</strong>
+🙏Mohon di pertimbang kan lagi,
+Mungkin Seseorang menulis nya <strong>sangat penting!
+Untuk keperluan pribadi </strong>atau pun <strong>umum/publik,</strong>
+Semoga anda Ambil keputusan dengan bijak<br>
+⚠️ <strong>Peringatan:</strong> Tindakan ini <u>tidak dapat dibatalkan</u>. Pastikan anda yakin sebelum melanjutkan.
+Tetap lanjutkan. <br>
+<button class="button" onclick="hapus()">Ya lanjut kan</button>
+Atau
+<button class="button" onclick="batal()">Batalkan</button>
+</div>
+</div>
+<div class="container">
+<div class="left">
+<iframe id="view" class="iframe"></iframe>
+<div class="nava">
+<button id="copy" class="btna">Copy</button>
+<a id="code" class="btna" href=''>Code</a>
+<a id="full" class="btna" href=''>View</a>
+</div>
+<textarea id="input" class="textarea" rows="10" placeholder="Tulis sesuatu..."></textarea>
+</div>
+<div class="right">
+<nav>
+    <a href='/?page=home'>Home</a>
+    <a href='/?page=about'>About</a>
+    <a href='/?page=blog'>Blog</a>
+  </nav>
+<h4>📁 Daftar File: <br><small>Click Select/Unselect</small></h4>
+<ul id="fileList"></ul>
+<h4 id="status">Rename</h4>
+<div class="btn">
+<input type="text" class="text" id="filename" autocomplete="off" placeholder="NamaFile.txt"> <button onclick="rename()" class="button">Rename</button></div>
+<div class="btn">
+<button class="button" onclick="simpan()">Simpan</button>
+<button id="modal" class="button" onclick="modal()">Hapus</button>
+</div>
+<div class="btn"><form id="fetchForm"><input type="hidden" name="nf" id="nf" autocomplete="off" placeholder="import.txt" required><input type="url" class="text" id="url" name="urlt" autocomplete="off" placeholder="https://example.com" required><button type="submit" class="button">Upload</button></form></div>
+<h6>2025 &copy; <a href='#'>Dotnet</a> </h6>
+</div></div>
+</body></html>
+<script>
+const url = "https://i.somee.com/";
+let selectedFile = "";
+const statusEl = document.getElementById('status');
+
+// 📂 Load daftar file
+async function loadFileList() {
+try {
+const res = await fetch(`${url}api/list`);
+const files = await res.json();
+const ul = document.getElementById('fileList');
+ul.innerHTML = '';
+files.forEach((file, index) => {
+const li = document.createElement('li');
+li.textContent = file;
+li.className = "file-item";
+li.onclick = () => selectFile(file, li);
+ul.appendChild(li);
+// Auto-select file pertama
+if (index === 0) {
+selectFile(file, li);
+}
+});
+} catch (err) {
+document.getElementById('status').textContent = "Gagal";
+console.error("Error ambil file list:", err);
+}
+}
+// 📌 Pilih file
+async function selectFile(nama, liElement) {
+const semuaItem = document.querySelectorAll('.file-item');
+// Cek apakah file yang diklik sudah dipilih
+const sudahDipilih = selectedFile === nama && liElement.classList.contains('selected');
+if (sudahDipilih) {
+// 🔄 Unselect
+selectedFile = "";
+document.getElementById('filename').value = "New.txt";
+document.getElementById('input').value = "Tulis kode disini contoh:\n<h1>Contoh</h1>\nLalu klick Tombol >> Simpan ";
+document.getElementById('view').srcdoc = "";
+document.getElementById('status').textContent = "Buat file";
+semuaItem.forEach(el => el.classList.remove('selected'));
+return;
+}
+// ✅ Select file baru
+semuaItem.forEach(el => el.classList.remove('selected'));
+liElement.classList.add('selected');
+selectedFile = nama;
+document.getElementById('filename').value = nama;
+document.getElementById('status').textContent = "Ganti nama";
+document.getElementById('code').href = `${url}api/baca/${encodeURIComponent(nama)}`;
+document.getElementById('full').href = `${url}blog/${nama}`;
+try {
+const res = await fetch(`${url}api/baca/${encodeURIComponent(nama)}`);
+const isi = await res.text();
+document.getElementById('input').value = isi;
+document.getElementById('view').srcdoc = isi;
+} catch (err) {
+document.getElementById('status').textContent = "Gagal membaca";
+}
+}
+const input = document.getElementById('input');
+const log = document.getElementById("view");
+input.addEventListener("input", updateValue);
+function updateValue(e) {
+log.srcdoc = e.target.value;
+}
+loadFileList();
+// 💾 Simpan file
+async function simpan() {
+const nama = selectedFile || document.getElementById('filename').value.trim();
+const isi = document.getElementById('input').value;
+if (!nama) {
+document.getElementById('status').textContent = "Isi nama";
+return;
+}
+try {
+const res = await fetch(`${url}api/simpan/${encodeURIComponent(nama)}`, {
+method: 'POST',
+headers: { 'Content-Type': 'text/plain' },
+body: isi
+});
+const teks = await res.text();
+selectedFile = nama;
+document.getElementById('filename').value = nama;
+document.getElementById('status').textContent = "Sukses";
+loadFileList();
+} catch (err) {
+document.getElementById('status').textContent = "Gagal";
+}
+}
+// 🔄 Rename file
+async function rename() {
+const ke = document.getElementById('filename').value.trim();
+if (!selectedFile || !ke || selectedFile === ke) return statusEl.textContent = "Nama salah";
+const formData = new FormData();
+formData.append("from", selectedFile);
+formData.append("to", ke);
+try {
+const res = await fetch(`${url}api/rename`, {
+method: 'POST',
+body: formData
+});
+const teks = await res.text();
+selectedFile = ke;
+document.getElementById('filename').value = ke;
+statusEl.textContent = teks;
+loadFileList();
+fetchKomentar();
+} catch (err) {
+statusEl.textContent = "Gagal rename file.";
+}
+}
+// 🗑️ Modal konfirmasi hapus
+const ele = document.getElementById('konfirm');
+function modal() {
+if (!selectedFile) return statusEl.textContent = "Di ihapus.";
+ele.classList.remove('hidd');
+ele.classList.add('show');
+}
+function batal() {
+ele.classList.remove('show');
+ele.classList.add('hidd');
+}
+// ❌ Hapus file
+async function hapus() {
+ele.classList.remove('show');
+ele.classList.add('hidd');
+if (!selectedFile) return statusEl.textContent = "Pilih file";
+try {
+const res = await fetch(`${url}api/hapus/${encodeURIComponent(selectedFile)}`, { method: 'DELETE' });
+const teks = await res.text();
+document.getElementById('input').value = "";
+selectedFile = "";
+document.getElementById('filename').value = "";
+statusEl.textContent = teks;
+loadFileList();
+} catch (err) {
+statusEl.textContent = "Gagal";
+}
+}
+document.getElementById('nf').value = "import.txt";
+document.getElementById('url').value = "https://example.com";
+document.getElementById('fetchForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const fn = e.target.nf.value;
+  const urlt = e.target.urlt.value;
+  try {
+    const res = await fetch(`${url}api/fetch?fn=${encodeURIComponent(fn)}&urlt=${encodeURIComponent(urlt)}`);
+    const text = await res.text();
+    document.getElementById('status').textContent = "Sukses";
+ loadFileList()
+} catch (err) {
+    document.getElementById('status').textContent = 'Gagal: ' + err;
+  }
+
+});
+document.getElementById('copy').addEventListener('click', function() { let outputText = document.getElementById('input'); outputText.select(); outputText.setSelectionRange(0, 99999); document.execCommand('copy'); document.getElementById('status').innerText = 'Text copied!'; setTimeout(() => { document.getElementById('status').innerText = 'Ganti nama'; }, 1000); });
+</script>
