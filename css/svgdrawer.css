@@ -1,0 +1,63 @@
+*{padding: 0;margin: 0;box-sizing:border-box;}
+:root, html, body {
+width: 100vw;
+height: 100vh;
+}
+body {
+background:#aaa;
+}
+#sizeDisplay {
+color: #fff;
+font-size: 12px;
+pointer-events: none;
+}
+#handle{
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' shape-rendering='geometricPrecision' text-rendering='geometricPrecision' image-rendering='optimizeQuality' fill-rule='evenodd' clip-rule='evenodd' viewBox='0 0 512 512'%3E%3Cpath fill-rule='nonzero' d='M318.633 104.048h-49.644v94.774c22.158 5.014 39.533 22.56 44.319 44.772h94.644v-78.986L512 256l-104.048 91.392V268.989h-94.774c-4.968 21.952-22.237 39.221-44.189 44.189v94.774h78.403L256 512l-91.392-104.048H243.594v-94.644c-22.212-4.786-39.758-22.161-44.772-44.319h-94.774v78.403L0 256l104.048-91.392V243.594h94.644c4.83-22.419 22.483-40.072 44.902-44.902v-94.644h-78.986L256 0l91.392 104.048h-28.759z'/%3E%3C/svg%3E");
+color:rgba(0,0,0,0.1);
+width:30px;
+height:30px;
+position: absolute;
+right:-2px;
+bottom:-2px;
+cursor: se-resize;
+touch-action: none;
+border:2px solid #fff;
+border-radius: 4px;
+}
+#resizable {
+width: 300px;
+min-width:30px;
+max-width: 100vw;
+height:150px;
+min-height: 30px;
+max-height:100vh;
+overflow:hidden;
+background: #f9f9f9;
+position: relative;
+border:2px solid #fff;
+border-radius: 4px;
+margin-bottom:10px;
+}
+table{
+background:#1f1f1f;
+width:100vw;
+}
+tr{display:flex;width:100%;}
+td p{padding:5px;}
+td{
+vertical-align: middle;
+width:100%;
+text-align:center;
+flex:1;display:inline-block;
+padding:3px 5px;
+color: white;
+cursor: pointer;
+border-radius: 4px;
+border:1px solid #ccc;
+font-size:14px;
+}
+input[type="text"]{
+width:100px;background:#fff;
+}
+svg{margin-bottom:10px;
+max-width:100vw;max-height:100vh;}
