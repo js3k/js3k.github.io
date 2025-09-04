@@ -1,10 +1,62 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+<title>Direktori Js</title>
+<script src="jquery.min.js"></script>
 <style>
-  :root,body,{margin:0;padding:0;}
-</style> </style>
-</head><body>
-  <textarea><script src='https://js3k.github.io/jquery/jquery.min.js'>
-  <textarea><script src='https://js3k.github.io/jquery/jquery-ui.min.js'></script>
-</textarea>
-</body></html>
+*{margin:0;padding:0;box-sizing:border-box;}
+body {font-family: sans-serif; background: #f9f9f9; padding: 10px; }
+ul { list-style: none; padding: 0; margin: 0; }
+li{ background: #eee;
+margin: 4px 0;
+padding:5px;
+border: 2px solid #ccc;
+border-radius: 6px;
+width:100%;
+}
+span{display:flex;background: #eee;width:100%;}
+p,a{
+padding:6px;flex:1;text-align:center;
+text-decoration: none;
+font-family: monospace;
+border:1px solid #ccc;
+}
+.raw { float: right; color: #456789; }
+textarea{width:100%;padding:4px;}
+#copy{background:green;}
+</style>
+</head>
+<body>
+<h2>📁 Isi Direktori <code>/js/</code></h2>
+<div id="data">Memuat...</div>
+<!-- Script utama render <li> -->
+<script>
+const url = "https://api.github.com/repos/js3k/js3k.github.io/contents/js";
+$.getJSON(url, function (data) {
+const $ul = $("<ul>");
+$.each(data, function (_, item) {
+const rawName = item.html_url.replace(
+/https:\/\/github.com\/js3k\/js3k.github.io\/blob\/main\/js\//,
+""
+);
+const cleanName = rawName.replace(/\.(html|css|js|txt|md|png)/, "");
+const $li = $("<li>").html(`<span><p>${rawName}</p><a class="raw" href="${item.download_url}">raw</a></span><span><p id="copy">Copy Text</p><textarea><script src="https://js3k.github.io/js/${rawName}"><\/script><\/textarea></span>`);
+$ul.append($li);});
+$("#data").empty().append($ul);});
+</script>
+<!-- Script tambahan untuk tombol Copy -->
+<script>
+$(document).on("click", "#copy", function () {
+const $li = $(this).closest("li");
+const $textarea = $li.find("textarea");
+if ($textarea.length) {
+navigator.clipboard.writeText($textarea.val()).then(() => {
+$(this).text("✅ Copied!");
+setTimeout(() => $(this).text("Copy Text"), 1000);
+}).catch(() => {
+alert("Gagal menyalin teks.");
+});
+}
+});
+</script>
+</body>
+</html>
