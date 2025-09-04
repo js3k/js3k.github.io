@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-<title>Direktori Js</title>
-<script src="jquery.min.js"></script>
+<title>Direktori Css</title>
+<script src="../js/jquery.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body {font-family: sans-serif; background: #f9f9f9; padding: 10px; }
@@ -26,20 +26,20 @@ textarea{width:100%;padding:4px;}
 </style>
 </head>
 <body>
-<h2>📁 Isi Direktori <code>/js/</code></h2>
+<h2>js3k.github.io/css/</h2>
 <div id="data">Memuat...</div>
 <!-- Script utama render <li> -->
 <script>
-const url = "https://api.github.com/repos/js3k/js3k.github.io/contents/js";
+const url = "https://api.github.com/repos/js3k/js3k.github.io/contents/css";
 $.getJSON(url, function (data) {
 const $ul = $("<ul>");
 $.each(data, function (_, item) {
 const rawName = item.html_url.replace(
-/https:\/\/github.com\/js3k\/js3k.github.io\/blob\/main\/js\//,
+/https:\/\/github.com\/js3k\/js3k.github.io\/blob\/main\/css\//,
 ""
 );
 const cleanName = rawName.replace(/\.(html|css|js|txt|md|png)/, "");
-const $li = $("<li>").html(`<span><p>${rawName}</p><a class="raw" href="${item.download_url}">raw</a></span><span><p id="copy">Copy Text</p><textarea><script src="https://js3k.github.io/js/${rawName}"><\/script><\/textarea></span>`);
+const $li = $("<li>").html(`<span><p>${rawName}</p><a class="raw" href="${item.download_url}">raw</a></span><span><p id="copy">Copy Text</p><textarea><link rel="stylesheet" href="https://js3k.github.io/css/${rawName}"><\/textarea></span>`);
 $ul.append($li);});
 $("#data").empty().append($ul);});
 </script>
