@@ -137,20 +137,203 @@ $('#tFc').on('input', function() { $('text').attr('fill',this.value); });
 $('#tFs').on('input', function() { $('text').attr('font-size',this.value); });
 $('#dur').on('input', function() { $('animate,animateMotion').attr('dur',this.value+'s')});
 $('#tAc').on('input', function (){$('#textPath').text($(this).val()); });
-$('svg').on('click', function () {
-  const svgElement = this; 
-  const serializer = new XMLSerializer();
-  const source = serializer.serializeToString(svgElement);
-  const svgWithNS = source.includes('xmlns')
-    ? source
-    : source.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
-  const blob = new Blob([svgWithNS], { type: 'image/svg+xml' });
-  const url = URL.createObjectURL(blob);
-  const $a = $('<a>')
-    .attr('href', url)
-    .attr('download', 'clicked-image.svg') 
-    .appendTo('body');
-  $a[0].click();
-  $a.remove();
-  URL.revokeObjectURL(url);
+
+let targetEl = null;
+
+const ATTR_MAP = {
+  svg: ['width', 'height', 'viewBox'],
+  circle: ['fill', 'stroke', 'stroke-width', 'r'],
+  rect: ['fill', 'stroke', 'stroke-width', 'width', 'height'],
+  path: ['fill', 'stroke', 'stroke-width'],
+  text: ['fill', 'stroke', 'font-size'],
+  line: ['stroke', 'stroke-width', 'x1', 'y1', 'x2', 'y2'],
+  ellipse: ['fill', 'stroke', 'stroke-width', 'rx', 'ry'],
+  polygon: ['fill', 'stroke', 'stroke-width'],
+  polyline: ['fill', 'stroke', 'stroke-width'],
+  textpath: ['startOffset', 'href', 'fill', 'stroke', 'font-size']
+};
+
+const injectHtml = `<div id="pickerContainer">
+  <div id="output">Klik elemen SVG untuk melihat atribut dan mulai injeksi...</div>
+  <button id="toggleSourceBtn">🔍Source</button>
+  <button id="copySourceBtn">📋 Copy</button>
+  <button id="downloadSvgBtn">💾 Download</button>
+  <pre id="svgSourceDisplay"></pre>
+  <fieldset>
+    <legend>Target Atribut:</legend>
+    <div id="attrRadioGroup">
+      <!-- Radio dinamis akan dimasukkan di sini -->
+    </div>
+  </fieldset>
+  <div class="range-group" id="rangeGroup">
+    <label for="sizeRange">Ukuran:</label>
+    <input class="input-range" type="range" id="sizeRange" value="5" min="1" max="1000">
+    <span class="range-value" id="rangeValue">5</span>
+  </div>
+  <div id="picker"></div>
+</div>`;
+
+function injectPanel(html) {
+  $('.inject-container').remove();
+  const $inject = $('<div class="inject-container"></div>').html(html);
+  $(targetEl).closest('svg').after($inject);
+  initLivePanel();
+}
+
+function renderAttrRadios(tagName) {
+  const attrs = ATTR_MAP[tagName] || [];
+  const $container = $('#attrRadioGroup');
+  $container.empty();
+
+  if (attrs.length === 0) {
+    $container.append('<p>(Tidak ada atribut yang bisa dimodifikasi)</p>');
+    return;
+  }
+
+  attrs.forEach(attr => {
+    const id = `attr-${attr}`;
+    const radio = `
+      <label for="${id}">
+        <input type="radio" name="attrTarget" value="${attr}" id="${id}">
+        ${attr}
+      </label>
+    `;
+    $container.append(radio);
+  });
+
+  $container.find('input[name="attrTarget"]').first().prop('checked', true).trigger('change');
+}
+
+function initLivePanel() {
+  const tag = targetEl.tagName.toLowerCase();
+  const attrs = Array.from(targetEl.attributes).map(attr => `${attr.name}="${attr.value}"`);
+  $('#output').text(`🎯 Target: <${tag}>\n${attrs.join('\n') || '(tidak ada atribut)'}`);
+  renderAttrRadios(tag);
+  updateLiveSource();
+
+  $('input[name="attrTarget"]').off('change').on('change', function () {
+  const attr = $(this).val();
+  const isSizeAttr = ['stroke-width', 'r', 'font-size', 'width', 'height', 'rx', 'ry'].includes(attr);
+  const isViewBox = attr === 'viewBox';
+
+  $('#rangeGroup').toggle(isSizeAttr);
+  $('#viewBoxGroup').remove(); // bersihkan dulu
+
+  if (isViewBox) {
+    const currentVal = $(targetEl).attr('viewBox') || '';
+    const viewBoxInput = `
+      <div id="viewBoxGroup">
+        <label for="viewBoxInput">ViewBox:</label>
+        <input type="text" id="viewBoxInput" value="${currentVal}" placeholder="contoh: 0 0 100 100">
+      </div>
+    `;
+    $('#picker').before(viewBoxInput);
+
+    $('#viewBoxInput').on('input', function () {
+      const val = this.value;
+      $(targetEl).attr('viewBox', val);
+      $('#output').text(`\n🧭 viewBox diubah ke "${val}"`);
+      updateLiveSource();
+    });
+  }
+});
+
+  $('#picker').colpick({
+    flat: true,
+    layout: 'hex',
+    submit: 0,
+    color: 'ff0000',
+    onChange: function(hsb, hex, rgb, el, bySetColor) {
+      if (targetEl) {
+        const attr = $('input[name="attrTarget"]:checked').val();
+        const isSizeAttr = ['stroke-width', 'r', 'font-size', 'width', 'height', 'rx', 'ry'].includes(attr);
+        if (!isSizeAttr) {
+          $(targetEl).attr(attr, '#' + hex);
+          $('#output').text(`\n🎨 ${attr} diubah ke #${hex}`);
+          updateLiveSource();
+        }
+      }
+    }
+  });
+
+  $('#sizeRange').off('input').on('input', function () {
+    const val = this.value;
+    $('#rangeValue').text(val);
+    const attr = $('input[name="attrTarget"]:checked').val();
+    if (targetEl && ['stroke-width', 'r', 'font-size', 'width', 'height', 'rx', 'ry'].includes(attr)) {
+      $(targetEl).attr(attr, val);
+      $('#output').text(`\n📏 ${attr} diubah ke ${val}`);
+      updateLiveSource();
+    }
+  });
+
+  $('#toggleSourceBtn').off('click').on('click', function () {
+    $('#svgSourceDisplay').slideToggle();
+    updateLiveSource();
+  });
+
+  $('#copySourceBtn').off('click').on('click', function () {
+    const svgRoot = $(targetEl).closest('svg')[0];
+    if (svgRoot) {
+      const svgText = svgRoot.outerHTML;
+      navigator.clipboard.writeText(svgText).then(() => {
+        alert('✅ SVG berhasil disalin ke clipboard!');
+      }).catch(err => {
+        alert('❌ Gagal menyalin: ' + err);
+      });
+    } else {
+      alert('⚠️ Tidak ada elemen SVG yang dipilih.');
+    }
+  });
+
+  $('#downloadSvgBtn').off('click').on('click', function () {
+    const svgRoot = $(targetEl).closest('svg')[0];
+    if (svgRoot) {
+      const svgText = svgRoot.outerHTML;
+      const svgBlob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(svgBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'injected-svg.svg';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } else {
+      alert('⚠️ Tidak ada elemen SVG yang dipilih.');
+    }
+  });
+}
+
+function updateLiveSource() {
+  const svgRoot = targetEl ? $(targetEl).closest('svg')[0] : null;
+  const svgContent = svgRoot ? svgRoot.outerHTML : '(SVG tidak ditemukan)';
+  $('#svgSourceDisplay').text(svgContent);
+}
+$(document).on('click', 'svg, svg *', function (e) {
+  e.stopPropagation();
+  $('svg,svg *').removeClass('highlight');
+  $(this).addClass('highlight');
+
+  let clickedEl = this;
+  let tag = clickedEl.tagName.toLowerCase();
+
+  // ✅ Jika klik <textPath>, fallback ke parent <text>
+  if (tag === 'textpath') {
+    const parentText = $(clickedEl).closest('text')[0];
+    if (parentText) {
+      targetEl = parentText;
+      console.log('🎯 Fallback ke <text> dari <textPath>');
+    } else {
+      targetEl = clickedEl; // fallback tetap ke <textPath> kalau gak ada <text>
+    }
+  } else {
+    targetEl = clickedEl;
+  }
+
+  injectPanel(injectHtml);
+});
+
+$(document).ready(function () {
+  setupSVGClickHandler();
 });
