@@ -39,7 +39,7 @@ const rawName = item.html_url.replace(
 ""
 );
 const cleanName = rawName.replace(/\.(html|css|js|txt|md|png)/, "");
-const $li = $("<li>").html(`<span><p>${rawName}</p><a class="raw" href="${item.download_url}">raw</a></span><span><p id="copy">Copy Text</p><textarea><script src="https://js3k.github.io/css/${rawName}"><\/script><\/textarea></span>`);
+const $li = $("<li>").html(`<span><p>${rawName}</p><a class="raw" href="${item.download_url}">raw</a></span><span><p id="copy">Copy Text</p><textarea><script src="https://js3k.github.io/js/${rawName}"><\/script><\/textarea></span>`);
 $ul.append($li);});
 $("#data").empty().append($ul);});
 </script>
@@ -50,7 +50,7 @@ const $li = $(this).closest("li");
 const $textarea = $li.find("textarea");
 if ($textarea.length) {
 navigator.clipboard.writeText($textarea.val()).then(() => {
-$(this).text("✅ Copied!");
+$(this).text("✅Copied!");
 setTimeout(() => $(this).text("Copy Text"), 1000);
 }).catch(() => {
 alert("Gagal menyalin teks.");
@@ -59,4 +59,5 @@ alert("Gagal menyalin teks.");
 });
 </script>
 </body>
+
 </html>
