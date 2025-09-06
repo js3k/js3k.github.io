@@ -1,0 +1,207 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+<title>SvgEditor</title>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/colpick.js"></script>
+<style>
+*{padding: 0;margin: 0;box-sizing:border-box;}
+:root, html, body {
+width: 100vw;
+height: 100vh;
+}
+h3{text-align:center;}
+textarea{background:rgba(0,0,0,0.9);color:coral;font-size:8px;width:100%;height:80px;white-space:pre-wrap;overflow:scroll;padding:5px;}
+.svgpicker{width:100%;height:200px;overflow:scroll;}
+.flex{background:silver;height:100%;display:flex;width:max-content}
+svg{flex:0 0 300px;border:2px solid #ddd;width:100%;height:100%;}
+.active{ border: 2px dashed red; margin:; }
+.btn-group{display: flex; gap: 20px; margin: 10px 0; }
+.control-btn {display:none;padding: 5px 10px; background: #eee; cursor: pointer; margin: 3px; border-radius: 4px; }
+.panel {display: none; margin: 10px 0; }
+#sliderPanel{text-align:center;width:100%;padding:0 10px}
+#slider{width:80%}
+</style>
+</head>
+<body>
+<textarea id="svgCodePreview"></textarea>
+<h3>Click svg to run editor</h3>
+<div class="svgpicker">
+<div class="flex"></div></div>
+<!-- Panel Slider -->
+<div id="sliderPanel" class="panel">
+<input type="range" id="slider" min="1" max="300" value="10">
+<span id="sliderValue">10</span>
+</div>
+<!-- Panel Colpick -->
+<div id="pickerPanel" class="panel"></div>
+<!-- Kontrol Panel -->
+<div class="btn-group">
+<div class="btn-left">
+<div class="control-btn color-btn" data-target="elPath" data-prop="fill">PathFill</div>
+<div class="control-btn color-btn" data-target="elPath" data-prop="stroke">PathStroke</div>
+<div class="control-btn color-btn" data-target="elRect" data-prop="fill">RectFill</div>
+<div class="control-btn color-btn" data-target="elCircle" data-prop="fill">CircleFill</div>
+<div class="control-btn color-btn" data-target="elCircle" data-prop="stroke">CstrokeF</div>
+<div class="control-btn color-btn" data-target="elText" data-prop="fill">TextFill</div>
+</div>
+<div class="btn-right">
+<div class="control-btn size-btn" data-target="elPath" data-prop="stroke-width">PathStrokeW</div>
+<div class="control-btn size-btn" data-target="elRect" data-prop="width">RectWidth</div>
+<div class="control-btn size-btn" data-target="elRect" data-prop="height">RectHeight</div>
+<div class="control-btn size-btn" data-target="elCircle" data-prop="r">CircleRadius</div>
+<div class="control-btn size-btn" data-target="elCircle" data-prop="stroke-width">CstrokeW</div>
+<div class="control-btn size-btn" data-target="elText" data-prop="font-size">TextSize</div>
+</div>
+</div>
+<script>
+$('.flex').load('https://js3k.github.io/svg/svg.text');
+$('#svginput').on('input', function(){let svgText = $(this).val();
+if (!svgText.includes('xmlns')){svgText = svgText.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');}
+if (!svgText.startsWith('<?xml')){svgText = '<?xml version="1.0" encoding="UTF-8"?>\n' + svgText;}
+const parser = new DOMParser();
+const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+const $svgEl = $(svgDoc.documentElement);
+if ($svgEl.prop('nodeName') === 'parsererror') {
+$('#svgout').html('<p style="color:red">SVG tidak valid</p>');
+return;
+}
+$('#svgout').empty().append($svgEl);
+});
+(function($){
+const panelControl = {
+currentTarget: null,
+currentProp: null,
+lastSVG: null,
+init: function(){
+this.bindSVGClick();
+this.bindColorControls();
+this.bindSizeControls();
+this.initColpick();
+this.bindSlider();
+},
+bindSVGClick: function(){
+$(document).on('click', 'svg', function(){
+const $svg = $(this);
+if (panelControl.lastSVG && panelControl.lastSVG[0] !== $svg[0]){
+panelControl.lastSVG.removeClass("active");
+panelControl.lastSVG.find('*').removeClass('elCircle elRect elText elPath');
+}
+$svg.addClass("active");
+const tagToClassMap = {
+'circle': 'elCircle',
+'rect': 'elRect',
+'text': 'elText',
+'path': 'elPath'
+};
+$.each(tagToClassMap, function(tag, className) {
+$svg.find(tag).each(function(){
+$(this).addClass(className);
+});
+});
+panelControl.lastSVG = $svg;
+panelControl.updateSVGCodePreview();
+panelControl.updateControlVisibility($svg); // ⬅️ Tombol disesuaikan di sini
+});
+},
+updateControlVisibility: function($svg) {
+const hasCircle = $svg.find('circle').length > 0;
+const hasRect = $svg.find('rect').length > 0;
+const hasPath = $svg.find('path').length > 0;
+const hasText = $svg.find('text').length > 0;
+$('.control-btn').each(function () {
+const target = $(this).data('target');
+let show = false;
+switch (target) {
+case 'elCircle': show = hasCircle; break;
+case 'elRect': show = hasRect; break;
+case 'elPath': show = hasPath; break;
+case 'elText': show = hasText; break;
+}
+$(this).toggle(show);
+});
+},
+bindColorControls: function() {
+$('.color-btn').on('click', function() {
+const targetClass = $(this).data('target');
+const prop = $(this).data('prop');
+if ($('#sliderPanel').is(':visible')) {
+panelControl.resetSizePanel();
+}
+if (panelControl.currentTarget === targetClass && panelControl.currentProp === prop && $('#pickerPanel').is(':visible')) {
+panelControl.resetColorPanel();
+} else {
+panelControl.currentTarget = targetClass;
+panelControl.currentProp = prop;
+$('#pickerPanel').fadeIn();
+}
+});
+},
+resetColorPanel: function() {
+$('#pickerPanel').fadeOut();
+panelControl.currentTarget = null;
+panelControl.currentProp = null;
+},
+initColpick: function() {
+$('#pickerPanel').colpick({
+flat: true,
+layout: 'hex',
+submit: 1,
+color: 'ff0000',
+onChange: function(hsb, hex, rgb, el, bySetColor) {
+if (!panelControl.currentTarget) return;
+$('.' + panelControl.currentTarget).attr(panelControl.currentProp, '#' + hex);
+panelControl.updateSVGCodePreview();
+}
+});
+},
+bindSizeControls: function() {
+$('.size-btn').on('click', function() {
+const targetClass = $(this).data('target');
+const prop = $(this).data('prop');
+if ($('#pickerPanel').is(':visible')) {
+panelControl.resetColorPanel();
+}
+if (panelControl.currentTarget === targetClass && panelControl.currentProp === prop && $('#sliderPanel').is(':visible')) {
+panelControl.resetSizePanel();
+} else {
+panelControl.currentTarget = targetClass;
+panelControl.currentProp = prop;
+const currentVal = $('.' + targetClass).first().attr(prop) || 10;
+$('#slider').val(currentVal);
+$('#sliderValue').text(currentVal);
+$('#sliderPanel').fadeIn();
+}
+});
+},
+resetSizePanel: function() {
+$('#sliderPanel').fadeOut();
+panelControl.currentTarget = null;
+panelControl.currentProp = null;
+},
+bindSlider: function(){
+$('#slider').on('input', function() {
+const val = $(this).val();
+$('.' + panelControl.currentTarget).attr(panelControl.currentProp, val);
+$('#sliderValue').text(val);
+panelControl.updateSVGCodePreview();
+});
+},
+updateSVGCodePreview: function() {
+const $activeSVG = $('.active');
+if ($activeSVG.length) {
+const svgCode = $activeSVG[0].outerHTML;
+$('#svgCodePreview').text(svgCode);
+}
+}
+};
+$(document).ready(function() {
+panelControl.init();
+});
+})(jQuery);
+function colpick_btn(){
+$('#pickerPanel').fadeOut();
+};
+</script>
+</script>
+</body>
+</html>
