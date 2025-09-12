@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="svg3" width="330" height="194" class="highlight">
+<!-- Path melengkung untuk textPath kedua -->
+  <path id="lineAC" d="M15 160 q150 -250 300 0" stroke="rgba(148, 50, 50, 1)" stroke-width="1" fill="none"></path>
+
+  <!-- Text mengikuti path melengkung -->
+  <text font-size="38" fill="rgba(145, 0, 255, 0.3)" stroke="rgba(20, 45, 71, 0.7)" x="6" stroke-width="2">
+    <textPath href="#lineAC" startOffset="14" class="">I love SVG! I love SVG!</textPath>
+  </text>
+</svg>
