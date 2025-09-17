@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang='ID'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+    <title>Andigo html</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { padding: 10px; font-family: sans-serif; }
+.textarea{ white-space:nowrap; overflow:scroll; width: 100%; min-height:200px; padding:10px; }
+.textarea1{ white-space:nowrap; overflow:scroll; width: 100%; min-height:100px; padding:10px; }
+input, button { width: 32%; margin:5px; padding:8px}
+li {list-style:none; padding:5px; cursor: pointer; margin-bottom: 5px; border-bottom:1px dashed #bbb; }
+.selected {background:rgba(0,0,0,0.7); color: #fff; }
+iframe { width: 100%; height: 200px; margin-top: border: 1px solid #ccc; }
+h4,ul,p{padding:5px;border:1px solid #bbb;display:block}
+p a{text-decoration:none; color:red;}
+p span{font-size:12px}
+#konfirm{background:rgba(0,0,0,0.9); position:fixed;left:0;top:0;width:100%;height:100%;z-index:10;padding-top:40%;}
+.show{display:block;text-decoration:none; color:red;}
+.hidd{display:none}
+h6{font-size:18px;margin:20px 0;padding:10px;text-align:center;display:block}
+nav,.btn{display:flex;}
+nav a,.btn button{flex:1}
+nav a {border:1px solid #bbb;text-align:center;margin:5px; padding:8px; text-decoration: none; color: teal; }
+</style>
+  <script src='js/jquery.min.js'></script>
+</head><body>
+<div id="konfirm" class="hidd">
+<div style="background-color:#fff3cd; color:#856404; padding:12px; border:1px solid #ffeeba; border-radius:6px; font-family:sans-serif;">
+<strong>Sebentar 🖐 Apakah file yang ingin anda hapus, Anda sendiri yang menulis nya ?</strong>
+Jika iya laku kan lah 💖 dengan senang hati
+<strong>Tapi jika file yang ingin anda hapus bukan milik anda,</strong>
+🙏Mohon di pertimbang kan lagi,
+Mungkin Seseorang menulis nya <strong>sangat penting!
+Untuk keperluan pribadi </strong>atau pun <strong>umum/publik,</strong>
+Semoga anda Ambil keputusan dengan bijak<br>
+⚠️ <strong>Peringatan:</strong> Tindakan ini <u>tidak dapat dibatalkan</u>. Pastikan anda yakin sebelum melanjutkan.
+Tetap lanjutkan. <br>
+<button onclick="hapus()">Ya lanjut kan</button>
+Atau
+<button onclick="batal()">Batalkan</button>
+</div>
+</div>
+<textarea oninput="simpan()" id="input" class="textarea" rows="10" placeholder="Tulis sesuatu..."></textarea>
+<iframe id="view"></iframe>
+<h4>📁 Daftar File: <small>Click Select/Unselect</small></h4>
+<ul id="fileList"></ul>
+<h4><b id="status">Rename</b>: <input type="text" id="filename" autocomplete="off" placeholder="NamaFile.txt"> <b id="link"></b> </h4>
+<div class="btn">
+<button id="modal" onclick="modal()">Hapus</button>
+<button onclick="simpan()">Simpan</button>
+</div>
+<form id="fetchForm">
+<div class="btn">http Upload
+<input id ="nf" type="text" name="nf" autocomplete="off" placeholder="example.txt" required>
+<input id ="url" type="url" name="urlt" autocomplete="off" placeholder="https://example.com" required>
+<button type="submit">Upload</button>
+</form>
+</div>
+<form id="upload">
+<div class="btn">Upload
+  <input type="file" name="file" accept=".txt,.css,.js,.html,.htm" />
+  <button type="submit">Upload</button>
+</form>
+</div>
+</body>
+</html>
+<script>
+const url = "https://i.somee.com/";
+let selectedFile = "";
+
+$(function() {
+  // 🔄 Load file list
+  function loadFileList() {
+    $.getJSON(url + "api/list", function(files) {
+      const ul = $("#fileList").empty();
+      $.each(files, function(i, file) {
+        $("<li>").text(file).addClass("file-item").on("click", function() {
+          selectFile(file, this);
+        }).appendTo(ul);
+        if (i === 0) selectFile(file, ul.children().first()[0]);
+      });
+    });
+  }
+
+  // 📌 Select/unselect file
+  function selectFile(nama, el) {
+    const sudah = selectedFile === nama && $(el).hasClass("selected");
+    $(".file-item").removeClass("selected");
+    if (sudah) {
+      selectedFile = "";
+      $("#filename, #input").val("");
+      $("#view").attr("srcdoc", "");
+      $("#link").html("");
+      $("#status").text("Buat file");
+      return;
+    }
+    $(el).addClass("selected");
+    selectedFile = nama;
+    $("#filename").val(nama);
+    $("#status").text("Ganti nama");
+    $.get(url + "api/baca/" + encodeURIComponent(nama), function(isi) {
+      $("#input").val(isi);
+      $("#view").attr("srcdoc", isi);
+      $("#link").html(`<button onclick="rename()">Rename</button>`);
+    });
+  }
+
+  // 💾 Simpan file
+  window.simpan = function() {
+    const nama = selectedFile || $("#filename").val().trim();
+    const isi = $("#input").val();
+    if (!nama) return $("#status").text("Isi nama");
+    $.ajax({
+      url: url + "api/simpan/" + encodeURIComponent(nama),
+      method: "POST",
+      contentType: "text/plain",
+      data: isi,
+      success: function(teks) {
+        selectedFile = nama;
+        $("#filename").val(nama);
+        $("#status").text(teks);
+        loadFileList();
+      }
+    });
+  };
+
+  // 🔄 Rename file
+  window.rename = function() {
+    const ke = $("#filename").val().trim();
+    if (!selectedFile || !ke || selectedFile === ke) return $("#status").text("Nama salah");
+    const formData = new FormData();
+    formData.append("from", selectedFile);
+    formData.append("to", ke);
+    $.ajax({
+      url: url + "api/rename",
+      method: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(teks) {
+        selectedFile = ke;
+        $("#filename").val(ke);
+        $("#status").text(teks);
+        loadFileList();
+      }
+    });
+  };
+
+  // 🗑️ Modal konfirmasi
+  window.modal = function() {
+    if (!selectedFile) return $("#status").text("Di ihapus.");
+    $("#konfirm").removeClass("hidd").addClass("show");
+  };
+  window.batal = function() {
+    $("#konfirm").removeClass("show").addClass("hidd");
+  };
+
+  // ❌ Hapus file
+  window.hapus = function() {
+    batal();
+    if (!selectedFile) return $("#status").text("Pilih file");
+    $.ajax({
+      url: url + "api/hapus/" + encodeURIComponent(selectedFile),
+      method: "DELETE",
+      success: function(teks) {
+        $("#input").val("");
+        selectedFile = "";
+        $("#filename").val("");
+        $("#status").text(teks);
+        loadFileList();
+      }
+    });
+  };
+
+  // 🌐 Fetch file dari URL
+  $("#fetchForm").on("submit", function(e) {
+    e.preventDefault();
+    const fn = $("#nf").val();
+    const urlt = $("#url").val();
+    $.get(url + "api/fetch", { fn, urlt }, function(teks) {
+      $("#status").text("Sukses");
+      loadFileList();
+    }).fail(err => $("#status").text("Gagal: " + err));
+  });
+
+  // 📤 Upload file lokal
+  $("#upload").on("submit", function(e) {
+    e.preventDefault();
+    const file = this.file.files[0];
+    if (!file) return alert("Pilih file dulu, beb!");
+    const formData = new FormData();
+    formData.append("file", file);
+    $.ajax({
+      url: url + "api/upload",
+      method: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(teks) {
+        $("#status").text(teks);
+        loadFileList();
+      }
+    });
+  });
+
+  // 🔁 Live preview
+  $("#input").on("input", function() {
+    $("#view").attr("srcdoc", this.value);
+  });
+
+  // 🚀 Start
+  loadFileList();
+});
+</script>
