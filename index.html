@@ -105,59 +105,6 @@ setTimeout(() => { document.getElementById('notif').innerText = ''; }, 1000);
 </nav>
 <h4>Semua Artikel</h4>
 <ul>
-// Load data dari localStorage saat halaman dibuka
-window.addEventListener('DOMContentLoaded', () => {
-const savedInput = localStorage.getItem('inputText');
-if (savedInput) {
-document.getElementById('inputText').value = savedInput;
-updateOutput(savedInput);
-}
-});
-// Fungsi untuk update output dan simpan ke localStorage
-function updateOutput(inputText) {
-let outputText = inputText
-.split('\n')
-.map(line => line.replace(/\s+/g, ' ').trim())
-.filter(line => line.length > 0)
-.join('\n');
-document.getElementById('outputText').value = outputText;
-// Simpan ke localStorage
-localStorage.setItem('inputText', inputText);
-localStorage.setItem('outputText', outputText);
-}
-// Event input live + simpan
-document.getElementById('inputText').addEventListener('input', function() {
-updateOutput(this.value);
-});
-// Hapus teks + hapus dari localStorage
-document.getElementById('clearText').addEventListener('click', function() {
-document.getElementById('inputText').value = '';
-document.getElementById('outputText').value = '';
-localStorage.removeItem('inputText');
-localStorage.removeItem('outputText');
-});
-// Fungsi live update saat mengetik
-document.getElementById('inputText').addEventListener('input', function() {
-let inputText = this.value;
-let outputText = inputText
-.split('\n')
-.map(line => line.replace(/\s+/g, ' ').trim()) // bersihkan spasi berlebih
-.filter(line => line.length > 0)
-.join('\n');
-document.getElementById('outputText').value = outputText;
-});
-// Salin ke clipboard
-document.getElementById('copyToClipboard').addEventListener('click', function() {
-let outputText = document.getElementById('outputText');
-outputText.select();
-outputText.setSelectionRange(0, 99999);
-document.execCommand('copy');
-document.getElementById('notif').innerText = 'Text copied!';
-setTimeout(() => { document.getElementById('notif').innerText = ''; }, 1000);
-});
-</script>
-</body>
-</html>
 
 <li><a href="svg/A_result.svg">A_result.svg</a></li>
 <li><a href="svg/Template1.svg">Template1.svg</a></li>
