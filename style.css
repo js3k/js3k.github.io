@@ -44,6 +44,7 @@ overflow: scroll;
 list-style: none;
 }
 li a {
+display:block;
 text-decoration:none;
 background: #fff;
 color: #3f3f3f;
@@ -53,3 +54,4 @@ border-bottom: 2px solid #bbb;
 }
 h3{text-align:center;margin-bottom:5px;}
 header,footer{text-align:center}
+
