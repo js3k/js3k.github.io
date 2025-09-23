@@ -5,30 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>js3k.github.io</title>
 <link rel="stylesheet" href="style.css">
-<style>
-textarea {
-background: #f8f9fa;
-padding: 10px;
-outline: none;
-border: none;
-white-space: pre-wrap;
-min-width: 800px;
-min-height: 120px;
-}
-.textv {
-background: #f8f9fa;
-padding: 0px;
-display: block;
-border: 1px solid #bbb;
-border-radius: 5px;
-white-space: nowrap;
-overflow: scroll;
-outline: none;
-width: 100%;
-min-height: 30vh;
-}
-button {padding:5px; margin:10px 0;}
-</style>
 </head>
 <body>
 <header>
@@ -39,67 +15,44 @@ button {padding:5px; margin:10px 0;}
 <section>
 <article>
 <h3>Minimal kan kode</h3>
-<div class="textv">
-<textarea id="inputText" placeholder="Paste teks di sini..."></textarea>
-</div>
-<button id="clearText">Kosong kan</button>
-<div class="textv">
-<textarea id="outputText" readonly></textarea>
-</div>
-<button id="copyToClipboard">Salin ke Clipboard</button>
-<span id="notif"></span>
-<script>
-// Load data dari localStorage saat halaman dibuka
-window.addEventListener('DOMContentLoaded', () => {
-const savedInput = localStorage.getItem('inputText');
-if (savedInput) {
-document.getElementById('inputText').value = savedInput;
-updateOutput(savedInput);
-}
-});
-// Fungsi untuk update output dan simpan ke localStorage
-function updateOutput(inputText) {
-let outputText = inputText
-.split('\n')
-.map(line => line.replace(/\s+/g, ' ').trim())
-.filter(line => line.length > 0)
-.join('\n');
-document.getElementById('outputText').value = outputText;
-// Simpan ke localStorage
-localStorage.setItem('inputText', inputText);
-localStorage.setItem('outputText', outputText);
-}
-// Event input live + simpan
-document.getElementById('inputText').addEventListener('input', function() {
-updateOutput(this.value);
-});
-// Hapus teks + hapus dari localStorage
-document.getElementById('clearText').addEventListener('click', function() {
-document.getElementById('inputText').value = '';
-document.getElementById('outputText').value = '';
-localStorage.removeItem('inputText');
-localStorage.removeItem('outputText');
-});
-// Fungsi live update saat mengetik
-document.getElementById('inputText').addEventListener('input', function() {
-let inputText = this.value;
-let outputText = inputText
-.split('\n')
-.map(line => line.replace(/\s+/g, ' ').trim()) // bersihkan spasi berlebih
-.filter(line => line.length > 0)
-.join('\n');
-document.getElementById('outputText').value = outputText;
-});
-// Salin ke clipboard
-document.getElementById('copyToClipboard').addEventListener('click', function() {
-let outputText = document.getElementById('outputText');
-outputText.select();
-outputText.setSelectionRange(0, 99999);
-document.execCommand('copy');
-document.getElementById('notif').innerText = 'Text copied!';
-setTimeout(() => { document.getElementById('notif').innerText = ''; }, 1000);
-});
-</script>
+<svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="400">
+<text id="t1" x="10" y="90" font-family="monospace"; font-size="40" fill="green">Welcome <tspan fill="black">to</tspan> js3k.github.io !</text>
+<text id="t2" visibility="hidden" x="10" y="190" font-family="monospace"; font-size="40" fill="black"><tspan fill="blue">I</tspan> am fine, how about <tspan fill="orange">you</tspan>?
+<set id="set31" begin="move2.end" attributeType="auto" attributeName="visibility" to="visible" />
+<set id="set32" begin="move6.end" attributeType="auto" attributeName="visibility" to="hidden" />
+</text>
+<text id="t3" visibility="hidden" x="10" y="290" font-family="monospace"; font-size="40" fill="green">Great. Let's go to ...
+<set id="set41" begin="move4.end" attributeType="auto" attributeName="visibility" to="visible" />
+<set id="set42" begin="move6.end" attributeType="auto" attributeName="visibility" to="hidden" />
+</text>
+<g id="cursor">
+<rect x="10" y="40" width="10" height="60" fill="#000">
+<animate id="blink1" begin="1; move6.end" attributeType="auto" attributeName="fill" to="#AAA" dur="0.5s" repeatCount="7" />
+<animate id="blink2" begin="move1.end" attributeType="auto" attributeName="fill" to="#AAA" dur="0.5s" repeatCount="5" />
+<animate id="blink3" begin="move2.end" attributeType="auto" attributeName="fill" to="#AAA" dur="0.5s" repeatCount="5" />
+<animate id="blink4" begin="move3.end" attributeType="auto" attributeName="fill" to="#AAA" dur="0.5s" repeatCount="5" />
+<animate id="blink5" begin="move4.end" attributeType="auto" attributeName="fill" to="#AAA" dur="0.5s" repeatCount="5" />
+<animate id="blink6" begin="move5.end" attributeType="auto" attributeName="fill" to="#AAA" dur="0.5s" repeatCount="5" />
+<set id="set11" begin="move2.begin" attributeType="auto" attributeName="y" to="140" fill="freeze" />
+<set id="set12" begin="move4.begin" attributeType="auto" attributeName="y" to="240" fill="freeze" />
+<set id="set13" begin="move6.begin" attributeType="auto" attributeName="y" to="40" fill="freeze" />
+</rect>
+<rect x="20" y="40" width="700" height="65" fill="#fff">
+<set id="set21" begin="move2.begin" attributeType="auto" attributeName="y" to="140" fill="freeze" />
+<set id="set22" begin="move4.begin" attributeType="auto" attributeName="y" to="240" fill="freeze" />
+<set id="set23" begin="move6.begin" attributeType="auto" attributeName="y" to="40" fill="freeze" />
+</rect>
+<animateTransform id="move1" begin="blink1.end" attributeName="transform" type="translate" from="0,0" to="24,0"
+dur="0.10s" accumulate="sum" calcMode="discrete" repeatCount="27" fill="freeze" />
+<animateTransform id="move2" begin="blink2.end" attributeName="transform" type="translate" from="456,0" to="0,0" dur="0.10s" fill="freeze" />
+<animateTransform id="move3" begin="blink3.end" attributeName="transform" type="translate" from="0,0" to="24,0"
+dur="0.10s" accumulate="sum" calcMode="discrete" repeatCount="25" fill="freeze" />
+<animateTransform id="move4" begin="blink4.end" attributeName="transform" type="translate" from="456,0" to="0,0" dur="0.10s" fill="freeze" />
+<animateTransform id="move5" begin="blink5.end" attributeName="transform" type="translate" from="0,0" to="24,0"
+dur="0.10s" accumulate="sum" calcMode="discrete" repeatCount="22" fill="freeze" />
+<animateTransform id="move6" begin="blink6.end" attributeName="transform" type="translate" from="456,0" to="0,0" dur="0.10s" fill="freeze" />
+</g>
+</svg>
 </article>
 </section>
 <aside>
@@ -110,6 +63,7 @@ setTimeout(() => { document.getElementById('notif').innerText = ''; }, 1000);
 </nav>
 <h4>Semua Artikel</h4>
 <ul>
+
 <li><a href="svg/file.txt">file.txt</a></li>
 <li><a href="svg/svg.txt">svg.txt</a></li>
 <li><a href="svg/gsap.txt">gsap.txt</a></li>
