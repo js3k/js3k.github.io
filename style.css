@@ -43,14 +43,13 @@ height: 90%;
 overflow: scroll;
 list-style: none;
 }
-li {
+li a {
+text-decoration:none;
 background: #fff;
 color: #3f3f3f;
 padding: 6px;
 cursor: pointer;
 border-bottom: 2px solid #bbb;
 }
-li.active { background: rgba(0,0,0,0.7); color: #fff; }
-nav{display:flex;width:100%;margin-bottom:5px;}
-nav a{flex:1;padding:5px;display:inline-block;border: 1px solid #bbb;text-align:center;text-decoration:none;border-radius:4px;}
+h3{text-align:center;margin-bottom:5px;}
 header,footer{text-align:center}
