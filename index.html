@@ -48,9 +48,9 @@ button {padding:5px; margin:10px 0;}
 </div>
 <button id="copyToClipboard">Salin ke Clipboard</button>
 <span id="notif"></span>
-&lt;script&gt;
+<script>
 // Load data dari localStorage saat halaman dibuka
-window.addEventListener('DOMContentLoaded', () =&gt; {
+window.addEventListener('DOMContentLoaded', () => {
 const savedInput = localStorage.getItem('inputText');
 if (savedInput) {
 document.getElementById('inputText').value = savedInput;
@@ -62,8 +62,8 @@ function updateOutput(inputText) {
 let outputText = inputText
 .split('
 ')
-.map(line =&gt; line.replace(/s+/g, ' ').trim())
-.filter(line =&gt; line.length &gt; 0)
+.map(line => line.replace(/s+/g, ' ').trim())
+.filter(line => line.length > 0)
 .join('
 ');
 document.getElementById('outputText').value = outputText;
@@ -88,8 +88,8 @@ let inputText = this.value;
 let outputText = inputText
 .split('
 ')
-.map(line =&gt; line.replace(/s+/g, ' ').trim()) // bersihkan spasi berlebih
-.filter(line =&gt; line.length &gt; 0)
+.map(line => line.replace(/s+/g, ' ').trim()) // bersihkan spasi berlebih
+.filter(line => line.length > 0)
 .join('
 ');
 document.getElementById('outputText').value = outputText;
@@ -101,9 +101,9 @@ outputText.select();
 outputText.setSelectionRange(0, 99999);
 document.execCommand('copy');
 document.getElementById('notif').innerText = 'Text copied!';
-setTimeout(() =&gt; { document.getElementById('notif').innerText = ''; }, 1000);
+setTimeout(() => { document.getElementById('notif').innerText = ''; }, 1000);
 });
-&lt;/script&gt;
+</script>
 </article>
 </section>
 <aside>
