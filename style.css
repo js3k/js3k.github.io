@@ -12,7 +12,12 @@ height: 100%;
 font-family: sans-serif;
 }
 h1{font-size:20px;}
-h1 a{color:red;text-decoration:2px solid black; }
+h1 a {
+  color: red;
+  text-decoration-line: underline;
+  text-decoration-color: black;
+  text-decoration-thickness: 2px;
+}
 .container{
 margin:5px 0;
 background: #fff;
