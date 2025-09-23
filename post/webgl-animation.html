@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Hypnotic Raymarched Shader: A 3D Canvas</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<style>
+* { margin: 0; padding: 0; overflow: hidden; }
+canvas { display: block; }
+</style>
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://unpkg.com/three@0.162.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.162.0/examples/jsm/"
+    }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+let scene, camera, renderer, uniforms, controls;
+
+function init() {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(0, 0, 1);
+
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.enableZoom = false;
+    controls.enablePan = false;
+
+    uniforms = {
+        time: { value: 1.0 },
+        resolution: { value: new THREE.Vector2() },
+        mouse: { value: new THREE.Vector2() },
+        cameraPos: { value: new THREE.Vector3() },
+        cameraQuaternion: { value: new THREE.Quaternion() }
+    };
+
+    const geometry = new THREE.PlaneGeometry(2, 2);
+    const material = new THREE.ShaderMaterial({
+        uniforms: uniforms,
+        vertexShader: `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = vec4(position, 1.0);
+            }
+        `,
+        fragmentShader: `
+            uniform float time;
+            uniform vec2 resolution;
+            uniform vec2 mouse;
+            uniform vec3 cameraPos;
+            uniform vec4 cameraQuaternion;
+            varying vec2 vUv;
+
+            vec3 rotateVector(vec4 quat, vec3 vec) {
+                return vec + 2.0 * cross(quat.xyz, cross(quat.xyz, vec) + quat.w * vec);
+            }
+
+            float map(vec3 p) {
+                vec3 q = fract(p) * 2.0 - 1.0;
+                return length(q) - 0.25;
+            }
+
+            void main() {
+                vec2 p = (2.0 * gl_FragCoord.xy - resolution.xy) / resolution.y;
+                vec2 m = mouse.xy / resolution.xy;
+
+                vec3 ro = vec3(0.0, 0.0, time * 0.5);
+                vec3 rd = normalize(vec3(p, 1.5));
+
+                float animTime = time * 0.3;
+                mat2 rot = mat2(cos(animTime), sin(animTime), -sin(animTime), cos(animTime));
+                rd.xz *= rot;
+
+                rd = rotateVector(cameraQuaternion, rd);
+
+                float t = 0.0;
+                float d = 0.0;
+
+                for(int i = 0; i < 64; i++) {
+                    vec3 p = ro + rd * t;
+                    d = map(p);
+                    t += d * 0.5;
+                }
+
+                vec3 col = vec3(0.0);
+                if(d < 0.01) {
+                    col = vec3(1.0, 0.5, 0.3) * (1.0 - t * 0.1);
+                }
+
+                col += vec3(0.1, 0.2, 0.5) * exp(-t * 0.1);
+                col = pow(col, vec3(0.8));
+
+                gl_FragColor = vec4(col, 1.0);
+            }
+        `
+    });
+
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    uniforms.resolution.value.x = window.innerWidth;
+    uniforms.resolution.value.y = window.innerHeight;
+
+    window.addEventListener('resize', onWindowResize);
+    document.addEventListener('mousemove', onMouseMove);
+}
+
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    uniforms.resolution.value.x = window.innerWidth;
+    uniforms.resolution.value.y = window.innerHeight;
+}
+
+function onMouseMove(event) {
+    uniforms.mouse.value.x = event.clientX;
+    uniforms.mouse.value.y = event.clientY;
+}
+
+function animate(timestamp) {
+    requestAnimationFrame(animate);
+    controls.update();
+    uniforms.cameraPos.value.copy(camera.position);
+    uniforms.cameraQuaternion.value.copy(camera.quaternion);
+    uniforms.time.value = timestamp * 0.001;
+    renderer.render(scene, camera);
+}
+
+init();
+animate();
+</script>
+<!-- partial -->
+  <script  src="./script.js"></script>
+
+</body>
+</html>
