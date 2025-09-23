@@ -2,9 +2,8 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>js3k.github.io</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minimal kan kode</title>
 <style>
 * {margin:0; padding:0; box-sizing:border-box;}
 body {margin:0; padding:10px;}
@@ -55,12 +54,10 @@ updateOutput(savedInput);
 // Fungsi untuk update output dan simpan ke localStorage
 function updateOutput(inputText) {
 let outputText = inputText
-.split('
-')
-.map(line => line.replace(/s+/g, ' ').trim())
+.split('\n')
+.map(line => line.replace(/\s+/g, ' ').trim())
 .filter(line => line.length > 0)
-.join('
-');
+.join('\n');
 document.getElementById('outputText').value = outputText;
 // Simpan ke localStorage
 localStorage.setItem('inputText', inputText);
@@ -81,12 +78,10 @@ localStorage.removeItem('outputText');
 document.getElementById('inputText').addEventListener('input', function() {
 let inputText = this.value;
 let outputText = inputText
-.split('
-')
-.map(line => line.replace(/s+/g, ' ').trim()) // bersihkan spasi berlebih
+.split('\n')
+.map(line => line.replace(/\s+/g, ' ').trim()) // bersihkan spasi berlebih
 .filter(line => line.length > 0)
-.join('
-');
+.join('\n');
 document.getElementById('outputText').value = outputText;
 });
 // Salin ke clipboard
@@ -99,16 +94,9 @@ document.getElementById('notif').innerText = 'Text copied!';
 setTimeout(() => { document.getElementById('notif').innerText = ''; }, 1000);
 });
 </script>
-</article>
-</section>
-<aside>
-<nav>
-<a href="/">Home</a>
-<a href="/about.html">About</a>
-<a href="/info.html">Info</a>
-</nav>
-<h4>Semua Artikel</h4>
-<ul>
+</body>
+</html>
+
 <li><a href="svg/A_result.svg">A_result.svg</a></li>
 <li><a href="svg/Template1.svg">Template1.svg</a></li>
 <li><a href="svg/Template2.svg">Template2.svg</a></li>
