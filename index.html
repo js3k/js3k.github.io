@@ -49,7 +49,6 @@ button {padding:5px; margin:10px 0;}
 <button id="copyToClipboard">Salin ke Clipboard</button>
 <span id="notif"></span>
 <script>
-// Load data dari localStorage saat halaman dibuka
 window.addEventListener('DOMContentLoaded', () => {
 const savedInput = localStorage.getItem('inputText');
 if (savedInput) {
@@ -57,7 +56,6 @@ document.getElementById('inputText').value = savedInput;
 updateOutput(savedInput);
 }
 });
-// Fungsi untuk update output dan simpan ke localStorage
 function updateOutput(inputText) {
 let outputText = inputText
 .split('
@@ -67,22 +65,18 @@ let outputText = inputText
 .join('
 ');
 document.getElementById('outputText').value = outputText;
-// Simpan ke localStorage
 localStorage.setItem('inputText', inputText);
 localStorage.setItem('outputText', outputText);
 }
-// Event input live + simpan
 document.getElementById('inputText').addEventListener('input', function() {
 updateOutput(this.value);
 });
-// Hapus teks + hapus dari localStorage
 document.getElementById('clearText').addEventListener('click', function() {
 document.getElementById('inputText').value = '';
 document.getElementById('outputText').value = '';
 localStorage.removeItem('inputText');
 localStorage.removeItem('outputText');
 });
-// Fungsi live update saat mengetik
 document.getElementById('inputText').addEventListener('input', function() {
 let inputText = this.value;
 let outputText = inputText
@@ -94,7 +88,6 @@ let outputText = inputText
 ');
 document.getElementById('outputText').value = outputText;
 });
-// Salin ke clipboard
 document.getElementById('copyToClipboard').addEventListener('click', function() {
 let outputText = document.getElementById('outputText');
 outputText.select();
