@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 360 640"
+     width="100%"
+     height="100%"
+     preserveAspectRatio="xMidYMid meet">
+<style>
+</style>
+  <rect x="0" y="10" rx="2" ry="2"
+        fill="rgba(51, 157, 214, 1)"
+        stroke="rgba(0, 0, 0, 0.3)"
+        stroke-width="1" 
+      width="100%"
+     height="100%"
+     preserveAspectRatio="xMidYMid meet"/>
+  <foreignObject x="10" y="10" width="100%" height="100%">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+<div id="text">
+      Hello from HTML inside SVG!
+</div>
+    </html>
+<script>
+document.querySelector('#text').onclick = function() {
+  this.textContent = 'halllllo brw';
+};
+</script>
+  </foreignObject>
+</svg>
