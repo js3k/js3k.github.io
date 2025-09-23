@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>js3k.github.io</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+.post{
+  background-color: #f0f0f0;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+.cd{
+position:relative;
+border:1px solid #aaa;
+padding:8px;
+margin: 5px;
+background-color: #f0f0f0;
+border-radius: 4px;
+overflow:hidden;
+}
+.copy-btn {
+  position:absolute;
+  right:0px; 
+  top:0px;
+  cursor: pointer;
+  font-size: 0.8em;
+  background-color: rgba(255,255,255,1);
+  border:1px solid #aaa;
+  padding: 7px 12px;
+  border-radius: 4px;
+}
+</style>
+</head>
+<body>
+<header>
+<h1><a href="/">js3k.github.io</a></h1>
+</header>
+<div class="container">
+<main>
+<section>
+<article>
+<h3>Install dotnet in termux</h3>
+<div class="post">
+buat file .bashrc
+<div class="cd">
+<pre>nano ~/.bashrc</pre>
+</div>
+
+Isi kode ini di .bashrc
+<div class="cd">
+<pre> # Tambahkan ke ~/.bashrc di Termux
+alias rp='php -S 127.0.0.1:8080 -t storage/shared/html'
+alias ulb='proot-distro login ubuntu --bind /storage/emulated/0:/out'
+alias ul='proot-distro login ubuntu'
+
+msb() {
+  echo ">> Login ke ubuntu + bind /app"
+  proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
+  echo ">> Build project dengan dotnet..."
+  cd /app || exit
+  export DOTNET_GCHeapHardLimit=0xC800000
+  export COMPlus_EnableDiagnostics=0
+  dotnet build
+EOF
+}
+
+pub() {
+  echo ">> Login ke Ubuntu + bind /pub"
+  proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
+  echo ">> Publish project ke app/publish/"
+  cd /app || exit
+  export DOTNET_GCHeapHardLimit=0xC800000
+  export COMPlus_EnableDiagnostics=0
+  dotnet publish -c Release -o ./publish/
+  echo "✅ Publish selesai!"
+EOF
+}
+
+cpw() {
+  echo ">> Login ke ubuntu + bind /app"
+  proot-distro login ubuntu --bind /storage/emulated/0:/app <<EOF
+  echo ">> Copy file project dari app ke web"
+  cp -r app/ /app/
+EOF
+}
+
+dll() {
+  echo ">> Login ke ubuntu + bind /app"
+   proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
+  echo ">> Build project dengan dotnet..."
+  cd /app || exit
+  export DOTNET_GCHeapHardLimit=0xC800000
+  export COMPlus_EnableDiagnostics=0
+
+  echo ">> Menjalankan file DLL..."
+  dotnet bin/Debug/net8.0/app.dll
+EOF
+}
+
+wpub() {
+  echo ">> Login ke Ubuntu + bind /pub"
+  proot-distro login ubuntu --bind /storage/emulated/0:/pub <<EOF
+
+  echo ">> Masuk ke folder ~/web"
+  cd ~/web || { echo "Folder ~/web tidak ditemukan"; exit 1; }
+
+  echo ">> Publish project ke ~/appub"
+  export DOTNET_GCHeapHardLimit=0xC800000
+  export COMPlus_EnableDiagnostics=0
+  dotnet publish -c Release -r win-x86 --self-contained -o ~/publish/
+
+  echo ">> Mundur ke root sebelum cd ../"
+  cd ~
+
+  echo ">> Copy hasil publish ke appub "
+  mv publish/ /pub/
+
+  echo "✅ Publish selesai!"
+EOF
+}
+</pre>
+</div>
+restart server .bashrc
+<div class="cd">
+<pre>source ~/.bashrc</pre>
+</div>
+
+kedua jangan lupa kode ini
+<div class="cd">
+<pre>kode awal</pre>
+</div>
+<div class="cd">
+<pre>kode awal 
+kode akhir dab </pre>
+</div>
+</div>
+</article>
+</section>
+<aside>
+<iframe src='https://src.runasp.net/komen/a15' style='width:100%;height:100vh;border:none;'></iframe>
+</aside>
+</main>
+</div>
+<footer>
+&copy; 2025  by Andi.
+</footer>
+</body>
+</html>
+<script>
+document.querySelectorAll('pre').forEach((pre, index) => {
+  // Buat tombol copy
+  const btn = document.createElement('button');
+btn.textContent = 'Copy';
+btn.classList.add('copy-btn');
+  pre.parentNode.insertBefore(btn, pre);
+
+  // Copy logic
+  btn.addEventListener('click', () => {
+    const text = pre.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 1500);
+    }).catch(err => {
+      console.error('Clipboard error:', err);
+      btn.textContent = 'Failed';
+    });
+  });
+});
+</script>
