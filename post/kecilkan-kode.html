@@ -2,11 +2,10 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minimal kan kode</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>js3k.github.io</title>
+<link rel="stylesheet" href="style.css">
 <style>
-* {margin:0; padding:0; box-sizing:border-box;}
-body {margin:0; padding:10px;}
 textarea {
 background: #f8f9fa;
 padding: 10px;
@@ -26,12 +25,19 @@ white-space: nowrap;
 overflow: scroll;
 outline: none;
 width: 100%;
-min-height: 150px;
+min-height: 30vh;
 }
 button {padding:5px; margin:10px 0;}
 </style>
 </head>
 <body>
+<header>
+<h1><a href="/">js3k.github.io</a></h1>
+</header>
+<div class="container">
+<main>
+<section>
+<article>
 <h3>Minimal kan kode</h3>
 <div class="textv">
 <textarea id="inputText" placeholder="Paste teks di sini..."></textarea>
@@ -94,5 +100,17 @@ document.getElementById('notif').innerText = 'Text copied!';
 setTimeout(() => { document.getElementById('notif').innerText = ''; }, 1000);
 });
 </script>
+</article>
+</section>
+<aside>
+<nav>
+<a href="/">Home</a>
+<a href="/about.html">About</a>
+<a href="/info.html">Info</a>
+</nav>
+<iframe src='https://src.runasp.net/komen/a13' style='width:100%;height:100vh;border:none;'></iframe>
+</aside>
+</main>
+</div>
 </body>
 </html>
