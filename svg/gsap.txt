@@ -1,0 +1,25 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+<script src="js/gsap.min.js"></script>
+<script>
+    const kotak = document.getElementById("kotak");
+    let isExpanded = false;
+
+    kotak.addEventListener("click", () => {
+      if (!isExpanded) {
+        gsap.to(kotak, {
+          attr: { width: 400, height: 400, x: 0, y: 0 },
+          duration: 0.1,
+          ease: "power2.out"
+        });
+      } else {
+        gsap.to(kotak, {
+          attr: { width: 50, height: 50, x: 75, y: 75 },
+          duration: 0.1,
+          ease: "power2.in"
+        });
+      }
+      isExpanded = !isExpanded;
+    });
+  </script>
+<rect id="kotak" x="75" y="75" width="50" height="50" fill="#00ff99" rx="8" />
+  </svg>
