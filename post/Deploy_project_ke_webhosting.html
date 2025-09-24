@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Svg Editor</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+img{width:100%;margin:0;padding:0;}
+.pre{background:#eef;white-space:pre-wrap;padding:10px;}
+</style>
+</head>
+<body>
+<header>
+<h1><a href="/">js3k.github.io</a></h1>
+</header>
+<div class="container">
+<main>
+<section>
+<article>
+<h3>Deploy project to web hosting</h3>
+<p class="pre">Welcome bro web ini hasil dari coding rebahan dan tidak ada kegiatan jadi ini hasil dari kegabutan
+oia buat yang baru terjun ke dotnet pasti aga kesusahan untuk deploy ke webhosting, 
+karna saya pernah merasakan nya, 
+bahkan untuk sekedar bisa jalan aja web dengan webapp tersimple,
+sangat susah di praktekin nya. karna gak tau cara kerjanya.
+setelah aku tau ternyata net core itu tidak seperti webform seperti net 4.8 
+<strong>dan ternyata kode c# tidak dapat di otak atik di server</strong>
+menggunakan file manager atau ftp. bahkan kita tidak dapat mengubah
+mengurangi logika/endpoint, karna fungsi kode c# sudah di pindah ke file.dll setelah di publish 
+dengan.... dotnet publish release -o ./publish . . .
+yang bisa kita otak atik adalah javascript untuk mengakses endpoint yang sudah di tetap kan di program.cs 
+sebelum di publish, setelah di publish program.cs tidak di gunakan lagi ternyata, 
+karna sudah di pindah fungsi nya ke file.dll 
+untuk membuat/menentu kan endpoint atau logika di program.cs 
+kita harus punya net core karna file dengan akhiran .cs tidak di eksekusi di webhosting..
+ok itu sedikit gambaran semoga penjelasan saya dapat sedikit menggambarkan dari dotnet webapp
+walau penjelasan saya smerawut/acak acakan...
+ini ada web app simpe yang saya buat file aslinya hanya 200kb 
+hanya ada gambar dan file2 gak jelas jadi isinya besar.
+untuk endpoint yang telah di publish jadi web.dll skema/map nya 
+bisa sobat buka di program.cs.txt  ingat ya program.cs.txt ini gambaran
+kode yang akan di ekseskusi di webhosting di dalam file web.dll.. 
+tidak ada pengaruh kita ubah program.cs.txt bahkan jika kita hapus itu tidak 
+berpengaruh itu hanya map untuk kita menyesuai kan kode javascript.
+kode js yang kita gunakan untuk mengakses web.dll.
+silahkan download disini <a href="../file/web.zip">web.zip</a> 
+cara pasang di web hosting yang support net.core, misal webhosting gratis: 
+1 <a href="https://monsterasp.net">Monsterasp.net</a><br>
+daptar disana setelah login masuk ke dashboard,</p>
+<a href="../ss/ss1.jpg"><img src="../ss/ss1.jpg" alt="ss1.jpg"></a><br>
+<p class="pre">pilih website yang di daptarin tadi. 
+contoh web saya wap.runasp.net</p>
+<a href="../ss/ss2.jpg"><img src="../ss/ss2.jpg" alt="ss2.jpg"></a><br>
+<p class="pre">setelah masuk ke pengaturan websit,
+contoh saya masuk ke website wap.runasp.net </p>
+<a href="../ss/ss3.jpg"><img src="../ss/ss3.jpg" alt="ss3.jpg"></a><br>
+<p class="pre">klik .NET untuk memilih net core, jika net nya udah 
+di .Net core 10/9/8/7/6/5 skip aja. sampai sini</p>
+ <a href="../ss/ss4.jpg"><img src="../ss/ss4.jpg" alt="ss4.jpg"></a><br>
+<p class="pre">Pilih di bagian .NET Version..</p>
+<a href="../ss/ss5.jpg"><img src="../ss/ss5.jpg" alt="ss5.jpg"></a><br>
+<p class="pre">Lalu centang input radio yang ada tulisan .NET 10/9/8/7/6/5/Core.</p>
+<a href="../ss/ss6.jpg"><img src="../ss/ss6.jpg" alt="ss6.jpg"></a><br>
+<p class="pre">Lalu klik save sampai muncul notifikasi berhasil/hijau...</p>
+<a href="../ss/ss7.jpg"><img src="../ss/ss7.jpg" alt="ss7.jpg"></a><br>
+<p class="pre">Untuk akses ftp..</p>
+<a href="../ss/ss8.jpg"><img src="../ss/ss8.jpg" alt="ss8.jpg"></a><br>
+<p class="pre">Klik show pasword lalu salin..</p>
+<a href="../ss/ss9.jpg"><img src="../ss/ss9.jpg" alt="ss9.jpg"></a><br>
+<p class="pre">Down lod X-Plore android cari di play store. buka bagian ftp.
+Klik tambahkan server.  isi data sesuai data hosting tadi..
+isi swmua data sesuai warna tanda panah.</p>
+<a href="../ss/ss10.jpg"><img src="../ss/ss10.jpg" alt="ss10.jpg"></a><br>
+<p class="pre">buka ftp di tab 1 x- plore....</p>
+<a href="../ss/ss11.jpg"><img src="../ss/ss11.jpg" alt="ss11.jpg"></a><br>
+<p class="pre">lalu pindah le tab 2 untuk membuka file web.zip lalu 
+Copy/salin isi web.zip yang udah di download tadi ,
+Ceklis semua file dan folder wwwroot.
+salin ke ftp server ke tab sebelah tadi..</p>
+<a href="../ss/ss12.jpg"><img src="../ss/ss12.jpg" alt="ss12.jpg"></a><br>
+<p class="pre">Kalo semua udah selesai...
+udah tinggal kunjungi alamat web sobat yang di daptarin tadi.
+untuk mengelola kontent template svg.
+bisa edit,rename,import via http/https,upload,hapus...
+bisa kunjungi [http://websobat.com/admin.html].
+contoh: wap.runasp.net/admin.html</p>
+<a href="../ss/ss13.jpg"><img src="../ss/ss13.jpg" alt="ss13.jpg"></a><br>
+<p class="pre">
+ubah nama [admin.html] di folder wwwroot/admin.html.. 
+sesuai keinginan sobat untuk mengamankan
+akses dari orang yang tidak diingin kan.. 
+nanti kalau mau keloka namafile harus diingat 
+http://alamatwebsobat.com/file-admin-yangdiubah.html .....
+<br>
+Untuk mengelola file di x-plore buka ftp.
+buka folder wwwroot/disitu semua file yang bisa di modifikasi..
+untuk skema endpoint nya ada di program.cs.txt
+<br>
+bisa juga di server gratisan <a href="https://somee.com">Somee.com</a><br> 
+catatan penting untuk somee.com tidak suport file statis. halaman akan blank,
+gunakan somee untuk server aja dan file html bisa di pasang di github pages.
+</p>
+</article>
+</section>
+<aside>
+<iframe src='https://src.runasp.net/komen/a14' style='width:100%;height:100vh;border:none;'></iframe>
+</aside>
+</main>
+</div>
+<footer>
+&copy; 2025  by Andi.
+</footer>
+</body>
+</html>
