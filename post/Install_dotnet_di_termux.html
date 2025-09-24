@@ -13,26 +13,35 @@
   padding: 6px 12px;
   border-radius: 4px;
 }
-.cd{
+pre{
 position:relative;
 border:1px solid #aaa;
 padding:8px;
 margin: 5px;
-background-color: #f0f0f0;
+background-color: #fff;
 max-height:150px;
-border-radius: 4px;
-overflow:hidden;
+border-radius: 4px 0 4px 4px;
+overflow:scroll;
+margin-bottom:30px;
+}
+.pre{
+border:1px solid #aaa;
+padding:5px;
+background-color: #fff;
+border-radius: 4px 0 4px 4px;
+white-space:pre-wrap;
+overflow:scroll;
+margin-bottom:30px;
 }
 .copy-btn {
-  position:absolute;
-  right:0px; 
-  top:0px;
+float:right;
   cursor: pointer;
   font-size: 0.8em;
-  background-color: rgba(255,255,255,1);
+  background-color: #fefefe;
   border:1px solid #aaa;
-  padding: 7px 12px;
-  border-radius: 4px;
+  padding: 7px;
+  border-radius: 0 4px 4px 0;
+border-left:0;
 }
 </style>
 </head>
@@ -44,24 +53,127 @@ overflow:hidden;
 <main>
 <section>
 <article>
-<h3>Install dotnet in termux</h3>
+<h3>Install dotnet di termux</h3>
 <div class="post">
-buat file .bashrc
+<p class="pre">
+Siap kan alat pendukung untuk belajar web development di android..
+1. <a href="X-Plore.apk">X-Plore</a> wajib banget...
+2. <a href="QuickEdit.apk">Quick Edit+</a> wajib gak pake banget...
+3. <a href="https://f-droid.org/repo/com.termux_1022.apk">Termux</a> wajib pake banget...
+Instal Termux: Unduh dan instal aplikasi Termux dari penyedia resminya <a href="https://f-droid.org/repo/com.termux_1022.apk">F-Droid</a> di ponsel atau tablet Anda. 
+</p>
+Perbarui Termux: Buka Termux dan perbarui semua paket dengan perintah:
+<div class="cd">
+<pre>pkg upgrade</pre>
+</div>
+Beri ijin aplikasi termuk membaca memori perangkat:
+<div class="cd">
+<pre>termux-setup-storage</pre>
+</div>
+Instal proot-distro: Instal alat proot-distro yang memungkinkan Anda menjalankan distribusi Linux lain di dalam Termux:
+<div class="cd">
+<pre>pkg install proot-distro</pre>
+</div>
+Instal Distro Linux (Ubuntu): Instal distribusi Ubuntu menggunakan proot-distro:
+<div class="cd">
+<pre>proot-distro install ubuntu</pre>
+</div>
+Masuk ke Distro Ubuntu: Jalankan distro Ubuntu yang baru diinstal:
+<div class="cd">
+<pre>proot-distro login ubuntu</pre>
+</div>
+Perbarui Distro Linux: Setelah masuk ke lingkungan Ubuntu, perbarui daftar paket dan paket yang terinstal:
+<div class="cd">
+<pre>apt update && apt dist-upgrade</pre>
+</div>
+Buat memory ram agar tidak terjadi kesalahan saat install atau menjalan kan, selalu gunakan ini kalu mau menjalan kan dotnet:
+<div class="cd">
+<pre>export DOTNET_GCHeapHardLimit=0xC800000 
+export COMPlus_EnableDiagnostics=0</pre>
+</div>
+Instal .NET SDK atau Runtime: Sekarang Anda bisa menginstal .NET. Pilih salah satu perintah berikut sesuai kebutuhan Anda:Untuk membuat aplikasi .NET (menginstal SDK):
+<div class="cd">
+<pre>apt install dotnet-sdk-8.0</pre>
+</div>
+Untuk menjalankan aplikasi yang sudah dibangun untuk .NET (menginstal runtime):
+<div class="cd">
+<pre>apt install dotnet-runtime-8.0</pre>
+</div>
+Cek apakah penginstallan dotnet sudah berhasil:
+<div class="cd">
+<pre>dotnet --info</pre>
+</div>
+Jika berhasil akan menunjukan info lengkap:
+<p class="pre">root@localhost:~# dotnet --info
+.NET SDK:
+ Version:           8.0.119
+ Commit:            ae38273ec4
+ Workload version:  8.0.100-manifests.b3962286
+
+Runtime Environment:
+ OS Name:     ubuntu
+ OS Version:  24.04
+ OS Platform: Linux
+ RID:         ubuntu.24.04-arm64
+ Base Path:   /usr/lib/dotnet/sdk/8.0.119/
+
+.NET workloads installed:
+ Workload version: 8.0.100-manifests.b3962286
+There are no installed workloads to display.
+
+Host:
+  Version:      8.0.19
+  Architecture: arm64
+  Commit:       fce8ed90dc
+
+.NET SDKs installed:
+  8.0.119 [/usr/lib/dotnet/sdk]
+
+.NET runtimes installed:
+  Microsoft.AspNetCore.App 8.0.19 [/usr/lib/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 8.0.19 [/usr/lib/dotnet/shared/Microsoft.NETCore.App]
+
+Other architectures found:
+  None
+
+Environment variables:
+  Not set
+
+global.json file:
+  Not found
+
+Learn more:
+  https://aka.ms/dotnet/info
+
+Download .NET:
+  https://aka.ms/dotnet/download</p>
+Kalau info sudah lengkap seperti di atas, sekarang tinggal test buat web minimal api, ketik kan ini:
+<div class="cd">
+<pre>dotnet new web -o app </pre>
+</div>
+kalau udah selesai proses nya, untuk memasti kan folder app sudah terbuat, ketik  ls lalu enter..
+sampai sini udah selesai. ketik exit lalu enter untuk keluar dari proot distro ubuntu..... agar lebih ringan termux nya ketik exit lalu enter keluar dari termux.
+Lalu buka lagi aplikasi termux nya, 
+agar bisa mengakses nya di memori perangkat, 
+edit file .bashrc dengan cara:
 <div class="cd">
 <pre>nano ~/.bashrc</pre>
 </div>
 
 Isi kode ini di .bashrc
 <div class="cd">
-<pre> # Tambahkan ke ~/.bashrc di Termux
-alias rp='php -S 127.0.0.1:8080 -t storage/shared/html'
-alias ulb='proot-distro login ubuntu --bind /storage/emulated/0:/out'
-alias ul='proot-distro login ubuntu'
+<pre> cpapp() {
+  echo ">> Login ke ubuntu + bind /app"
+  proot-distro login ubuntu --bind /storage/emulated/0:/app <<EOF
+  echo ">> Copy file project dari app ke app"
+  cp -r app/ /app/
+EOF
+}
 
 msb() {
   echo ">> Login ke ubuntu + bind /app"
   proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
-  echo ">> Build project dengan dotnet..."
+  echo ">> Build project dengan MSBuild"
   cd /app || exit
   export DOTNET_GCHeapHardLimit=0xC800000
   export COMPlus_EnableDiagnostics=0
@@ -69,7 +181,19 @@ msb() {
 EOF
 }
 
-pub() {
+dll() {
+  echo ">> Login ke ubuntu + bind /app"
+   proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
+  echo ">> Build project dengan dotnet..."
+  cd /app || exit
+  export DOTNET_GCHeapHardLimit=0xC800000
+  export COMPlus_EnableDiagnostics=0
+  echo ">> Menjalankan file DLL..."
+  dotnet bin/Debug/net8.0/app.dll
+EOF
+}
+
+netpub() {
   echo ">> Login ke Ubuntu + bind /pub"
   proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
   echo ">> Publish project ke app/publish/"
@@ -81,45 +205,14 @@ pub() {
 EOF
 }
 
-cpw() {
-  echo ">> Login ke ubuntu + bind /app"
-  proot-distro login ubuntu --bind /storage/emulated/0:/app <<EOF
-  echo ">> Copy file project dari app ke web"
-  cp -r app/ /app/
-EOF
-}
-
-dll() {
-  echo ">> Login ke ubuntu + bind /app"
-   proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
-  echo ">> Build project dengan dotnet..."
+winpub() {
+  echo ">> Login ke Ubuntu + bind /pub"
+  proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
+  echo ">> Publish project ke app/publish/"
   cd /app || exit
   export DOTNET_GCHeapHardLimit=0xC800000
   export COMPlus_EnableDiagnostics=0
-
-  echo ">> Menjalankan file DLL..."
-  dotnet bin/Debug/net8.0/app.dll
-EOF
-}
-
-wpub() {
-  echo ">> Login ke Ubuntu + bind /pub"
-  proot-distro login ubuntu --bind /storage/emulated/0:/pub <<EOF
-
-  echo ">> Masuk ke folder ~/web"
-  cd ~/web || { echo "Folder ~/web tidak ditemukan"; exit 1; }
-
-  echo ">> Publish project ke ~/appub"
-  export DOTNET_GCHeapHardLimit=0xC800000
-  export COMPlus_EnableDiagnostics=0
-  dotnet publish -c Release -r win-x86 --self-contained -o ~/publish/
-
-  echo ">> Mundur ke root sebelum cd ../"
-  cd ~
-
-  echo ">> Copy hasil publish ke appub "
-  mv publish/ /pub/
-
+  dotnet publish -c Release -r win-x86 --self-contained -o ./publish/
   echo "✅ Publish selesai!"
 EOF
 }
@@ -129,15 +222,23 @@ restart server .bashrc
 <div class="cd">
 <pre>source ~/.bashrc</pre>
 </div>
+<p class="pre">
+Ada beberapa Fungsi Shortcut dari .bashrc....
+1. cpapp > untuk menyalin folder app ke penyimpanan perangkat...
+2. msb > untuk build project, selalu ketik msb lalu enter setiap selesai mengubah file program.cs...
+3. dll > untuk menjalan kan debuging atau menjalan kan project, di localhost. 
+ketik dll lalu enter setelah selesai build, lalu kunjungi di browser http://127.0.0.1:5000 atau http://localhost:5000
+4. netpub > untuk publish project.. hasil publish ada di folder app/publish tengok di memori perangkat dengan x plore..
+5. winpub > untuk publish project dengan selfcontained. tapi ukuran lebih besar namun tidak tergantung pada runtim server...
 
-kedua jangan lupa kode ini
-<div class="cd">
-<pre>kode awal</pre>
-</div>
-<div class="cd">
-<pre>kode awal 
-kode akhir dab </pre>
-</div>
+untuk memulai ketik cpapp di termux, lalu enter. klo proses nya selesai.
+buka aplikasi x-plore buka internal storage cari folder app, buka file program.cs dengan quick edit+ untuk mengedit...
+setelah selesai klik simpan di dalam editor quick edit+ 
+minimal kan buka termux klik msb lalu enter tunggu proses selesai....
+kalo udah selesai klik dll untuk menjalan kan di localhost... kunjungi http://127.0.0.1:5000 atau http://localhost:5000 di browser. 
+klo udah sesuai project nya.  klik ctrl+c untuk stop server...
+ketik netpub untuk publish, hasil publish ada di folder app/publish upload ke hosting semua isi file dari folder [ publish ].....
+</p>
 </div>
 </article>
 </section>
@@ -155,16 +256,16 @@ kode akhir dab </pre>
 document.querySelectorAll('pre').forEach((pre, index) => {
   // Buat tombol copy
   const btn = document.createElement('button');
-btn.textContent = 'Copy';
+btn.textContent = '📝Copy';
 btn.classList.add('copy-btn');
-  pre.parentNode.insertBefore(btn, pre);
+pre.parentNode.insertBefore(btn, pre);
 
   // Copy logic
   btn.addEventListener('click', () => {
     const text = pre.textContent;
     navigator.clipboard.writeText(text).then(() => {
       btn.textContent = 'Copied!';
-      setTimeout(() => btn.textContent = 'Copy', 1500);
+      setTimeout(() => btn.textContent = '📝Copy', 1500);
     }).catch(err => {
       console.error('Clipboard error:', err);
       btn.textContent = 'Failed';
