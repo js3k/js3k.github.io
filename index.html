@@ -14,39 +14,64 @@
 <main>
 <section>
 <article>
-<svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="400">
-<text x="10" y="50" font-family="monospace"; font-size="40" fill="red">Welcome </tspan> <tspan fill="green">to</tspan> <tspan fill="blue">js3k.github.io !
-</text>
-<text visibility="hidden" x="10" y="100" font-family="monospace"; font-size="40" fill="black"><tspan fill="blue">I</tspan> am fine, how about <tspan fill="orange">you</tspan>?
+<svg viewBox="0 100 350 400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%">
+<rect width="100%" height="100%" fill="white" />
+<g stroke="#add8e6" stroke-width="1">
+<line x1="0" y1="0" x2="350" y2="0" />
+<line x1="0" y1="30" x2="350" y2="30" />
+<line x1="0" y1="60" x2="350" y2="60" />
+<line x1="0" y1="90" x2="350" y2="90" />
+<line x1="0" y1="120" x2="350" y2="120" />
+<line x1="0" y1="150" x2="350" y2="150" />
+<line x1="0" y1="180" x2="350" y2="180" />
+<line x1="0" y1="210" x2="350" y2="210" />
+<line x1="0" y1="240" x2="350" y2="240" />
+<line x1="0" y1="270" x2="350" y2="270" />
+<line x1="0" y1="300" x2="350" y2="300" />
+<line x1="0" y1="330" x2="350" y2="330" />
+<line x1="0" y1="360" x2="350" y2="360" />
+<line x1="0" y1="390" x2="350" y2="390" />
+<line x1="0" y1="420" x2="350" y2="420" />
+<line x1="0" y1="450" x2="350" y2="450" />
+<line x1="0" y1="480" x2="350" y2="480" />
+<line x1="0" y1="510" x2="350" y2="510" />
+<line x1="0" y1="540" x2="350" y2="540" />
+<line x1="0" y1="570" x2="350" y2="570" />
+<line x1="0" y1="600" x2="350" y2="600" />
+</g>
+<line x1="40" y1="0" x2="40" y2="600" stroke="red" stroke-width="1" />
+<text x="50" y="508" font-family="normal" font-size="120" font-weight="bold" fill="rgba(0,0,0,0.1)">JS3K</text>
+<text x="50" y="24" font-family="monospace" font-size="16" fill="rgba(0,0,0,0.8)">Welcome to js3k.github.io !</text>
+<text visibility="hidden" x="50" y="54" font-family="monospace" font-size="16" fill="rgba(0,0,0,0.8)">I am fine, how about you ?
 <set begin="move2.end" attributeType="auto" attributeName="visibility" to="visible" />
 <set begin="move6.end" attributeType="auto" attributeName="visibility" to="hidden" />
 </text>
-<text visibility="hidden" x="10" y="150" font-family="monospace"; font-size="40" fill="green">Great. Let's go to ...
+<text visibility="hidden" x="50" y="84" font-family="monospace" font-size="16" fill="rgba(0,0,0,0.8)">Great. Let's go to ...
 <set begin="move4.end" attributeType="auto" attributeName="visibility" to="visible" />
 <set begin="move6.end" attributeType="auto" attributeName="visibility" to="hidden" />
 </text>
 <g id="cursor">
-<rect x="10" y="10" width="4" height="50" fill="#000">
+<rect x="50" y="9" width="1" height="20" fill="#000">
 <animate id="blink1" begin="1; move6.end" attributeType="auto" attributeName="fill" to="#fff" dur="0.5s" repeatCount="3" />
 <animate id="blink2" begin="move1.end" attributeType="auto" attributeName="fill" to="#fff" dur="0.5s" repeatCount="3" />
 <animate id="blink3" begin="move2.end" attributeType="auto" attributeName="fill" to="#fff" dur="0.5s" repeatCount="3" />
 <animate id="blink4" begin="move3.end" attributeType="auto" attributeName="fill" to="#fff" dur="0.5s" repeatCount="3" />
 <animate id="blink5" begin="move4.end" attributeType="auto" attributeName="fill" to="#fff" dur="0.5s" repeatCount="3" />
 <animate id="blink6" begin="move5.end" attributeType="auto" attributeName="fill" to="#fff" dur="0.5s" repeatCount="3" />
-<set begin="move2.begin" attributeType="auto" attributeName="y" to="60" fill="freeze" />
-<set begin="move4.begin" attributeType="auto" attributeName="y" to="110" fill="freeze" />
-<set begin="move6.begin" attributeType="auto" attributeName="y" to="10" fill="freeze" />
+<set begin="move2.begin" attributeType="auto" attributeName="y" to="39" fill="freeze" />
+<set begin="move4.begin" attributeType="auto" attributeName="y" to="69" fill="freeze" />
+<set begin="move6.begin" attributeType="auto" attributeName="y" to="9" fill="freeze" />
 </rect>
-<rect x="13" y="10" width="700" height="55" fill="#fff">
-<set begin="move2.begin" attributeType="auto" attributeName="y" to="60" fill="freeze" />
-<set begin="move4.begin" attributeType="auto" attributeName="y" to="110" fill="freeze" />
-<set begin="move6.begin" attributeType="auto" attributeName="y" to="10" fill="freeze" />
+<rect x="51" y="9" width="400" height="20" fill="#fff">
+<set begin="move2.begin" attributeType="auto" attributeName="y" to="39" fill="freeze" />
+<set begin="move4.begin" attributeType="auto" attributeName="y" to="69" fill="freeze" />
+<set begin="move6.begin" attributeType="auto" attributeName="y" to="9" fill="freeze" />
 </rect>
-<animateTransform id="move1" begin="blink1.end" attributeName="transform" type="translate" from="0,0" to="24,0" dur="0.10s" accumulate="sum" calcMode="discrete" repeatCount="27" fill="freeze" />
+<animateTransform id="move1" begin="blink1.end" attributeName="transform" type="translate" from="0,0" to="9.6,0" dur="0.10s" accumulate="sum" calcMode="discrete" repeatCount="27" fill="freeze" />
 <animateTransform id="move2" begin="blink2.end" attributeName="transform" type="translate" from="456,0" to="0,0" dur="0.10s" fill="freeze" />
-<animateTransform id="move3" begin="blink3.end" attributeName="transform" type="translate" from="0,0" to="24,0" dur="0.10s" accumulate="sum" calcMode="discrete" repeatCount="25" fill="freeze" />
+<animateTransform id="move3" begin="blink3.end" attributeName="transform" type="translate" from="0,0" to="9.6,0" dur="0.10s" accumulate="sum" calcMode="discrete" repeatCount="26" fill="freeze" />
 <animateTransform id="move4" begin="blink4.end" attributeName="transform" type="translate" from="456,0" to="0,0" dur="0.10s" fill="freeze" />
-<animateTransform id="move5" begin="blink5.end" attributeName="transform" type="translate" from="0,0" to="24,0" dur="0.10s" accumulate="sum" calcMode="discrete" repeatCount="22" fill="freeze" />
+<animateTransform id="move5" begin="blink5.end" attributeName="transform" type="translate" from="0,0" to="9.6,0" dur="0.10s" accumulate="sum" calcMode="discrete" repeatCount="22" fill="freeze" />
 <animateTransform id="move6" begin="blink6.end" attributeName="transform" type="translate" from="456,0" to="0,0" dur="0.10s" fill="freeze" />
 </g></svg>
 </article>
