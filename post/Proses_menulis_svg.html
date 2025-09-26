@@ -105,7 +105,7 @@ xhttp.onreadystatechange = function() {
         const percent = Math.floor((index / totaltext.length) * 100);
         notif.innerHTML = "<p style='color:#2d2d00'>Membuat gambar:"+percent + "%</p>";
 
-        setTimeout(writeChar, 0.1); // jeda antar huruf
+        setTimeout(writeChar, 5); // jeda antar huruf
       } else {
         notif.innerHTML = "<p style='color:green'>Berhasil di buat:100%</p>";
         index = 0;
