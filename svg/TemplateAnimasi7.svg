@@ -1,0 +1,19 @@
+<svg version="1.1" id="L1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve" class="highlight">
+<circle fill="none" stroke="rgba(255, 0, 132, 0.5)" stroke-width="0.5" stroke-miterlimit="10" stroke-dasharray="33.3,33.3" cx="50" cy="50" r="40">
+<animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="15s" from="0 50 50" to="360 50 50" repeatCount="indefinite"></animateTransform>
+</circle>
+<g fill="#000" font-size="20">
+<text x="23" y="57">J
+<animateTransform attributeName="transform" dur="5s" type="translate" values="0 10 ; 0 -10; 0 10" repeatCount="indefinite" begin="0.2"></animateTransform>
+</text>
+<text x="35" y="57">S
+<animateTransform attributeName="transform" dur="5s" type="translate" values="0 10 ; 0 -10; 0 10" repeatCount="indefinite" begin="1"></animateTransform>
+</text>
+<text x="49" y="57">3
+<animateTransform attributeName="transform" dur="5s" type="translate" values="0 10 ; 0 -10; 0 10" repeatCount="indefinite" begin="1.6"></animateTransform>
+</text>
+<text x="61" y="57">K
+<animateTransform attributeName="transform" dur="5s" type="translate" values="0 10 ; 0 -10; 0 10" repeatCount="indefinite" begin="2.4"></animateTransform>
+</text>
+</g>
+</svg>
