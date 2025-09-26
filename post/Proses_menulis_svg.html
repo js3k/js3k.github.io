@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>js3k.github.io</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+article{position:relative;background:#000;height:100%}
+#textconten{
+display:none;
+}
+#input{
+font-size:14px;
+font-family: "Gill Sans", sans-serif;
+color:coral;
+background:rgba(0,0,0,0.8);
+padding:10px;
+white-space: pre-wrap;
+overflow:scroll;
+width:100%;
+position:absolute;
+left:0;bottom:0;
+}
+#output{
+font-size:14px;
+background:#f1f1f1;
+padding:10px;
+white-space: pre-wrap;
+overflow:scroll;
+width:100%;
+height:50%;
+position:absolute;
+left:0;top:0;
+z-index:99;
+}
+#notif{
+font-size:14px;
+padding:10px;
+white-space: pre-wrap;
+position:absolute;
+left:25%;top:46%;
+z-index:99;
+}
+#cursor {
+animation: blink 0.5s infinite;
+font-weight: bold;
+color:#fff;
+}
+@keyframes blink {
+0% { opacity: 1; }
+50% { opacity: 0; }
+100% { opacity: 1; }
+}
+</style>
+</head>
+<body>
+<header>
+<h1><a href="/">js3k.github.io</a></h1>
+</header>
+<div class="container">
+<main>
+<section>
+<article>
+<div id="output">ini</div>
+<div id="notif">0%</div>
+<pre id="input"><span id="typed"></span><span id="cursor">|</span></pre>
+</article>
+</section>
+<aside>
+<h3>Semua Artikel</h3>
+<ul>
+<li><a href="data/kecilkan-kode.html">kecilkan-kode</a></li>
+</ul>
+</aside>
+</main>
+</div>
+<footer>
+&copy; 2025 by Andi.
+</footer>
+</body>
+</html>
+<script>
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    const data = this.responseText;
+    let index = 0;
+    const totaltext = data;
+    const typedSpan = document.getElementById("typed");
+    const notif = document.getElementById("notif");
+
+    function writeChar() {
+      if (index === 0) {
+        typedSpan.textContent = "";
+      }
+
+      document.getElementById("output").innerHTML = typedSpan.textContent;
+
+      if (index < totaltext.length) {
+        typedSpan.textContent += totaltext.charAt(index);
+        index++;
+
+        // Hitung persentase loading
+        const percent = Math.floor((index / totaltext.length) * 100);
+        notif.innerHTML = "<p style='color:#2d2d00'>Membuat gambar:"+percent + "%</p>";
+
+        setTimeout(writeChar, 0.1); // jeda antar huruf
+      } else {
+        notif.innerHTML = "<p style='color:green'>Berhasil di buat:100%</p>";
+        index = 0;
+        setTimeout(writeChar, 20000); // tunggu sebelum ulang
+      }
+    }
+
+    writeChar();
+  }
+};
+xhttp.open("GET", "../svg/TemplateAnimasi7.svg", true);
+xhttp.send();
+</script>
