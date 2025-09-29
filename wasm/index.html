@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang='ID'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+    <title>Andigo html</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+        body { width:100vw;height:100vh;margin: 0; padding: 0; background-color: #fff; overflow: hidden; }
+        canvas { display: block; background-color: #000; border:1px solod #fff}
+        .controls { position: fixed; top: 10px; left: 10px; background: rgba(255, 255, 255, 0.5); padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <canvas id="dotsCanvas"></canvas>
+    <div class="controls">
+        <label for="dot-slider">Jumlah Titik: </label>
+        <input type="range" id="dot-slider" min="10" max="20000" value="100">
+        <span id="dot-count">100</span>
+    </div>
+
+    <script src="dots.js"></script>
+    
+    <script>
+        const canvas = document.getElementById('dotsCanvas');
+        const ctx = canvas.getContext('2d');
+        const slider = document.getElementById('dot-slider');
+        const dotCountSpan = document.getElementById('dot-count');
+
+        const DOT_SIZE_BYTES = 10 * 10; // Ukuran struct Dot
+
+        let resize_and_reinit_dots;
+        let update_dots;
+        let get_dots_ptr;
+        let get_num_dots;
+
+        Module.onRuntimeInitialized = function() {
+            resize_and_reinit_dots = Module.cwrap('resize_and_reinit_dots', null, ['number']);
+            update_dots = Module.cwrap('update_dots', null, []);
+            get_dots_ptr = Module.cwrap('get_dots', 'number', []);
+            get_num_dots = Module.cwrap('get_num_dots', 'number', []);
+            
+            // Inisialisasi awal jumlah titik
+            resize_and_reinit_dots(parseInt(slider.value));
+            
+            // Tambahkan event listener untuk slider
+            slider.addEventListener('input', (e) => {
+                const newNumDots = parseInt(e.target.value);
+                dotCountSpan.textContent = newNumDots;
+                resize_and_reinit_dots(newNumDots);
+            });
+
+            requestAnimationFrame(renderLoop);
+        };
+
+        function renderLoop() {
+            update_dots();
+
+            const numDots = get_num_dots();
+            if (numDots > 0) {
+                const dotsPtr = get_dots_ptr();
+                const dotsHeap = new Float32Array(Module.HEAPF32.buffer, dotsPtr, numDots * 4);
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < numDots; i++) {
+                    const dot = {
+                        x: dotsHeap[i * 4],
+                        y: dotsHeap[i * 4 + 1],
+                    };
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.beginPath();
+                    ctx.arc(dot.x, dot.y, 20, 0, 20 * Math.PI);
+                    ctx.fill();
+                }
+            }
+
+            requestAnimationFrame(renderLoop);
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+    </script>
+</body>
+</html>
