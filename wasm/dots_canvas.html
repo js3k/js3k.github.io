@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang='ID'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+<title>Andigo html</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { padding: 10px; font-family: sans-serif; }
+input[type="range"]{ padding: 10px; width:100%; }
+label { display: block; margin: 10px 0; font-weight: bold; }
+</style>
+</head>
+<body>
+<canvas width="350" height="600" style="border:1px solid #ccc"></canvas>
+
+<label>Jumlah dot: <span id="countDisplay">100</span></label>
+<input type="range" min="10" max="30000" value="100" id="slider">
+</body>
+</html>
+
+<script>
+let wasm, ctx = document.querySelector("canvas").getContext("2d");
+const slider = document.getElementById("slider");
+const countDisplay = document.getElementById("countDisplay");
+
+fetch("dots_canvas.wasm")
+  .then(res => res.arrayBuffer())
+  .then(bytes => WebAssembly.instantiate(bytes, {}))
+  .then(result => {
+    wasm = result.instance.exports;
+    wasm.init(+slider.value);
+    countDisplay.textContent = wasm.getCount();
+    requestAnimationFrame(loop);
+  });
+
+function loop() {
+  wasm.update();
+  const count = wasm.getCount();
+  countDisplay.textContent = count;
+
+  ctx.clearRect(0, 0, 350, 600);
+  for (let i = 0; i < count; i++) {
+    const x = wasm.getX(i);
+    const y = wasm.getY(i);
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = "orange";
+    ctx.fill();
+  }
+  requestAnimationFrame(loop);
+}
+
+slider.addEventListener("input", e => {
+  const val = +e.target.value;
+  wasm.init(val);
+  countDisplay.textContent = val;
+});
+</script>
