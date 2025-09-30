@@ -1,0 +1,41 @@
+<canvas width="400" height="400" id="canvas"></canvas>
+<br>
+Ukuran: <input type="range" id="size" min="2" max="20" value="5">
+Kecepatan: <input type="range" id="speed" min="0.1" max="5" step="0.1" value="1">
+Jumlah: <input type="range" id="count" min="10" max="500" value="100">
+
+<script>
+let wasm, ctx, radius = 5;
+
+fetch("dots1.wasm")
+  .then(res => res.arrayBuffer())
+  .then(bytes => WebAssembly.instantiate(bytes, {}))
+  .then(result => {
+    wasm = result.instance.exports;
+    ctx = document.getElementById("canvas").getContext("2d");
+
+    // Slider listeners
+    document.getElementById("size").oninput = e => radius = +e.target.value;
+    document.getElementById("speed").oninput = e => wasm.setSpeed(+e.target.value);
+    document.getElementById("count").oninput = e => wasm.setCount(+e.target.value);
+
+    wasm.setCount(100);
+    wasm.setSpeed(1);
+    requestAnimationFrame(loop);
+  });
+
+function loop() {
+  wasm.update();
+  ctx.clearRect(0, 0, 400, 400);
+  const count = wasm.getCount();
+  for (let i = 0; i < count; i++) {
+    const x = wasm.getX(i);
+    const y = wasm.getY(i);
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fillStyle = "deepskyblue";
+    ctx.fill();
+  }
+  requestAnimationFrame(loop);
+}
+</script>
