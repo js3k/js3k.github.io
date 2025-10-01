@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>🔥 Dokumentasi Modular WASM Rebahan</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; background: #f9f9f9; }
+    h1, h2 { color: #444; }
+    pre { background: #eee; padding: 1em; overflow-x: auto; }
+    code { font-family: monospace; }
+    .section { margin-bottom: 2em; }
+  </style>
+</head>
+<body>
+
+<h1>🔥 Dokumentasi Modular WASM Rebahan</h1>
+<p>Workflow ini memungkinkan kamu compile C ke WASM langsung dari browser, tanpa glue JS, tanpa bundler, dan langsung preview hasilnya. Cocok untuk edukasi, animasi, atau loader modular.</p>
+
+<div class="section">
+  <h2>1. Instalasi di Termux</h2>
+  <pre><code>
+pkg update
+pkg install nodejs git clang python
+npm install -g emscripten
+# atau clone emsdk:
+git clone https://github.com/emscripten-core/emsdk.git
+cd emsdk
+./emsdk install latest
+./emsdk activate latest
+source ./emsdk_env.sh
+  </code></pre>
+</div>
+
+<div class="section">
+  <h2>2. Buat File C Modular</h2>
+  <p>File <code>halo.c</code> berisi fungsi animasi elastis:</p>
+  <pre><code>
+float position = -100.0;
+float velocity = 0.0;
+float target = 0.0;
+float damping = 0.90;
+float stiffness = 0.10;
+
+void _open() {
+    position = -100.0;
+    target = 0.0;
+    velocity = -0.10;
+}
+
+void _close() {
+    position = 0.0;
+    target = -100.0;
+    velocity = -0.10;
+}
+
+float _update() {
+    float force = stiffness * (target - position);
+    velocity += force;
+    velocity *= damping;
+    position += velocity;
+    return position;
+}
+  </code></pre>
+</div>
+
+<div class="section">
+  <h2>3. Compile ke WASM Tanpa Glue</h2>
+  <p>Gunakan perintah ini di Termux:</p>
+  <pre><code>
+emcc halo.c -o halo.wasm --no-entry -s EXPORTED_FUNCTIONS="['_update','_open','_close']"
+  </code></pre>
+  <p><strong>Catatan:</strong> Fungsi di C pakai underscore (<code>_update</code>), tapi di JS dipanggil sebagai <code>update()</code>.</p>
+</div>
+
+<div class="section">
+  <h2>4. Setup Server Express</h2>
+  <p>Buat file <code>server.js</code>:</p>
+  <pre><code>
+const express = require('express');
+const { exec } = require('child_process');
+const fs = require('fs');
+const app = express();
+app.use(express.json());
+app.use(express.static(__dirname));
+
+app.get('/edit', (req, res) => {
+  fs.readFile('halo.c', 'utf8', (err, data) => {
+    if (err) return res.status(500).send('Gagal baca file');
+    res.send(data);
+  });
+});
+
+app.post('/edit', (req, res) => {
+  fs.writeFile('halo.c', req.body.code, 'utf8', (err) => {
+    if (err) return res.status(500).send('Gagal simpan file');
+    res.send('Berhasil disimpan');
+  });
+});
+
+app.post('/compile', (req, res) => {
+  exec(`emcc halo.c -o halo.wasm --no-entry -s EXPORTED_FUNCTIONS="['_update','_open','_close']"`, (err, stdout, stderr) => {
+    res.json({ success: !err, output: stdout, error: stderr });
+  });
+});
+
+app.listen(8080, () => console.log('🧠 Server listening on port 8080'));
+  </code></pre>
+</div>
+
+<div class="section">
+  <h2>5. Editor HTML + Live Preview</h2>
+  <p>Buat file <code>editor.html</code>:</p>
+  <pre><code>
+&lt;h3&gt;Editor halo.c&lt;/h3&gt;
+&lt;textarea id="editor" rows="20" cols="80" oninput="save()"&gt;&lt;/textarea&gt;&lt;br&gt;
+&lt;button onclick="compile()"&gt;Compile ke WASM&lt;/button&gt;
+&lt;pre id="out"&gt;&lt;/pre&gt;
+&lt;iframe src="halo.html"&gt;live preview&lt;/iframe&gt;
+
+&lt;script&gt;
+const ip = '192.168.43.25'; // ganti sesuai IP kamu
+
+fetch(`http://${ip}:8080/edit`)
+  .then(res => res.text())
+  .then(code => editor.value = code);
+
+function save() {
+  fetch(`http://${ip}:8080/edit`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code: editor.value })
+  });
+}
+
+function compile() {
+  fetch(`http://${ip}:8080/compile`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({})
+  })
+  .then(res => res.json())
+  .then(data => {
+    out.textContent = data.success ? '✅ Compile sukses!\n' + data.output : '❌ Gagal compile:\n' + data.error;
+    document.querySelector('iframe').src = 'halo.html'; // reload preview
+  });
+}
+
+setInterval(() => {
+  document.querySelector('iframe').src = 'halo.html';
+}, 3000);
+&lt;/script&gt;
+  </code></pre>
+</div>
+
+<div class="section">
+  <h2>6. Loader WASM di halo.html</h2>
+  <p>File <code>halo.html</code> untuk preview:</p>
+  <pre><code>
+&lt;div id="panel" style="width:100px;height:100px;background:#09f;position:absolute;"&gt;&lt;/div&gt;
+&lt;script&gt;
+WebAssembly.instantiateStreaming(fetch('halo.wasm'))
+  .then(result => {
+    const { update, open, close } = result.instance.exports;
+    open();
+    function loop() {
+      const pos = update();
+      panel.style.transform = `translateX(${pos}px)`;
+      requestAnimationFrame(loop);
+    }
+    loop();
+  });
+&lt;/script&gt;
+  </code></pre>
+</div>
+
+<hr>
+<p>🧠 Dibuat oleh Andi — Filosof rebahan modular. Upload ke GitHub dan bagikan ke komunitas!</p>
+
+</body>
+</html>
