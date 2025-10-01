@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Sidebar Mantul WASM</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+    #sidebar {
+      position: absolute;
+      top: 0;
+      left: -100vw;
+      width: 95vw;
+      height: 500px;
+      background: deepskyblue;
+      color: white;
+      padding: 10px;
+    }
+    button {
+    	padding:5px;
+      margin-right: 10px;
+      margin-top: 10px;
+      font-size:24px;
+    }
+    nav{
+position: absolute;
+      top: 0;
+      right: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="sidebar">Mantul Sidebar</div>
+  <nav>
+  <button id="toggleBtn" onclick="startMantul()">♻️</button>
+</nav>
+  <script>
+    let wasm, sidebar, isOpen = false;
+
+fetch("global.wasm")
+  .then(res => res.arrayBuffer())
+  .then(bytes => WebAssembly.instantiate(bytes, {}))
+  .then(result => {
+    wasm = result.instance.exports;
+    sidebar = document.getElementById("sidebar");
+  });
+
+function startMantul() {
+  const action = isOpen ? "close" : "open";
+  const target = action === "open" ? 0 : -100;
+  const toggleBtn = document.getElementById("toggleBtn");
+
+  if (action === "open") wasm.open();
+  else wasm.close();
+
+  function loop() {
+    const pos = wasm.update();
+    sidebar.style.left = pos + "vw";
+
+    const distance = Math.abs(pos - target);
+    if (distance > 0.1) {
+      requestAnimationFrame(loop);
+    } else {
+      sidebar.style.left = target + "vw";
+      isOpen = !isOpen;
+      toggleBtn.textContent = isOpen ? "❌" : "♻️";
+    }
+  }
+
+  loop();
+}
+  </script>
+</body>
+</html>
