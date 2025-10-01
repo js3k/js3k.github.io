@@ -42,7 +42,7 @@ position: absolute;
   <script>
     let wasm, sidebar, isOpen = false;
 
-fetch("global.wasm")
+fetch("sidebar.wasm")
   .then(res => res.arrayBuffer())
   .then(bytes => WebAssembly.instantiate(bytes, {}))
   .then(result => {
