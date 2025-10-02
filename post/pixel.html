@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WASM Canvas Live Log</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    canvas {
+      border: 1px solid #ccc;
+      display: block;
+      margin-bottom: 1em;
+    }
+    body {
+margin:0;
+      font-family: monospace;
+      padding:0;
+      background: #f9f9f9;
+    }
+    #log {
+      background: #eee;
+      padding: 0.5em;
+      font-size: 0.9em;
+      white-space: pre;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+<body>
+  <h2>WASM Canvas Live Log</h2>
+  <canvas id="c" width="350" height="600"></canvas>
+  <pre id="log">Memuat...</pre>
+
+  <script>
+    const log = document.getElementById('log');
+    const ctx = document.getElementById('c').getContext('2d');
+    let wasm;
+
+    function logText(msg) {
+      log.textContent = msg; // ⬅️ hanya 1 baris, terus update
+    }
+
+    fetch('pixel.wasm')
+      .then(r => r.arrayBuffer())
+      .then(b => WebAssembly.instantiate(b))
+      .then(r => {
+        wasm = r.instance.exports;
+
+        if (!wasm.get_buffer || !wasm.tick || !wasm.memory) {
+          logText('❌ Fungsi WASM tidak lengkap: ' + Object.keys(wasm).join(', '));
+          return;
+        }
+
+        const ptr = wasm.get_buffer();
+        const view = new Uint8ClampedArray(wasm.memory.buffer, ptr, 350 * 600 * 4);
+
+        logText('✅ WASM siap, pointer: ' + ptr);
+        logText('Pointer: ' + ptr);
+        logText('View length: ' + view.length);
+        requestAnimationFrame(function draw() {
+          try {
+            wasm.tick();
+            const img = new ImageData(view, 350, 600);
+            ctx.putImageData(img, 0, 0);
+
+            // Update log live, 1 baris
+            logText(`Pixel[0]: R=${view[0]} G=${view[1]} B=${view[2]} A=${view[3]}`);
+
+            requestAnimationFrame(draw);
+          } catch (err) {
+            logText('❌ Error saat draw: ' + err);
+            ctx.fillStyle = 'red';
+            ctx.fillRect(0, 0, 350, 600);
+          }
+        });
+      })
+      .catch(err => {
+        logText('❌ Gagal load WASM: ' + err);
+      });
+  </script>
+</body>
+</html>
