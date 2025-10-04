@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WASM Text Loader</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; background: #fefefe; }
+    #output { font-size: 1.5em; color: #444; }
+  </style>
+</head>
+<body>
+  <div id="output">Loading WASM…</div>
+  <script>
+    fetch("text.wasm").then(r => r.arrayBuffer()).then(bytes =>
+      WebAssembly.instantiate(bytes)
+    ).then(result => {
+      const ptr = result.instance.exports.get_text();
+      const mem = new Uint8Array(result.instance.exports.memory.buffer);
+      let str = "";
+      for (let i = ptr; mem[i]; i++) str += String.fromCharCode(mem[i]);
+      document.getElementById("output").textContent = str;
+    });
+  </script>
+</body>
+</html>

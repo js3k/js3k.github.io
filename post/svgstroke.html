@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>SVG WASM Border</title>
+  <style>
+    body {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    svg {
+      width: 220px;
+      height: 120px;
+    }
+    text {
+      fill: white;
+      font-weight: bold;
+      font-size: 16px;
+      dominant-baseline: middle;
+      text-anchor: middle;
+    }
+  </style>
+</head>
+<body>
+  <svg viewBox="0 0 220 120">
+    <defs>
+      <linearGradient id="borderGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="red" />
+        <stop offset="25%" stop-color="yellow" />
+        <stop offset="50%" stop-color="lime" />
+        <stop offset="75%" stop-color="cyan" />
+        <stop offset="100%" stop-color="blue" />
+      </linearGradient>
+    </defs>
+    <rect x="10" y="10" width="200" height="100" stroke="url(#borderGradient)" stroke-width="4" fill="black" rx="12" />
+    <text x="110" y="60" id="wasmText">...</text>
+  </svg>
+
+  <script>
+  (async () => {
+    const response = await fetch('svgstroke.wasm');
+    const buffer = await response.arrayBuffer();
+    const wasmModule = await WebAssembly.instantiate(buffer, {});
+    const { memory, get_angle, step, get_text_ptr, get_text_len } = wasmModule.instance.exports;
+
+    // Ambil teks dari WASM memory
+    const ptr = get_text_ptr();
+    const len = get_text_len();
+    const bytes = new Uint8Array(memory.buffer, ptr, len);
+    const text = new TextDecoder().decode(bytes);
+    document.getElementById("wasmText").textContent = text;
+
+    // Animasi gradien
+    const gradient = document.getElementById("borderGradient");
+    setInterval(() => {
+      step();
+      const angle = get_angle();
+      const rad = angle * Math.PI / 180;
+      const x = Math.cos(rad);
+      const y = Math.sin(rad);
+      gradient.setAttribute("x1", `${50 - x * 50}%`);
+      gradient.setAttribute("y1", `${50 - y * 50}%`);
+      gradient.setAttribute("x2", `${50 + x * 50}%`);
+      gradient.setAttribute("y2", `${50 + y * 50}%`);
+    }, 30);
+  })();
+  </script>
+</body>
+</html>

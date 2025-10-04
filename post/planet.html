@@ -1,0 +1,23 @@
+<canvas id="canvas" width="370" height="650"></canvas>
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const WIDTH = canvas.width, HEIGHT = canvas.height;
+
+fetch('planet.wasm')
+  .then(r => r.arrayBuffer())
+  .then(b => WebAssembly.instantiate(b, {}))
+  .then(({instance}) => {
+    const wasm = instance.exports;
+    const mem = wasm.memory;
+    const ptr = wasm.get_canvas_ptr();
+    function draw() {
+      wasm.draw_frame();
+      const buf = new Uint8ClampedArray(mem.buffer, ptr, WIDTH * HEIGHT * 4);
+      const img = new ImageData(buf, WIDTH, HEIGHT);
+      ctx.putImageData(img, 0, 0);
+      requestAnimationFrame(draw);
+    }
+    draw();
+  });
+</script>
