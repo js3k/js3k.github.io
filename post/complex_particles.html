@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Animasi Partikel WebAssembly</title>
+    <style>
+        body { background-color: #000; overflow: hidden; margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const NUM_PARTICLES = 100;
+        let wasm_instance, particles_ptr, particle_size, particles_view;
+        let mouseX = 0, mouseY = 0;
+        
+        async function init() {
+            // Muat modul WASM
+            const response = await fetch('complex_particles.wasm');
+            const wasm_bytes = await response.arrayBuffer();
+            const wasm_module = await WebAssembly.instantiate(wasm_bytes);
+            wasm_instance = wasm_module.instance;
+            
+            // Siapkan kanvas
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // Inisialisasi partikel dari WASM
+            wasm_instance.exports.init_particles(canvas.width, canvas.height, NUM_PARTICLES);
+            
+            // Akses memori WASM
+            particles_ptr = wasm_instance.exports.get_particles_ptr();
+            particle_size = wasm_instance.exports.get_particle_size();
+            
+            // Uint8Array untuk membaca data partikel dari memori
+            particles_view = new Float32Array(wasm_instance.exports.memory.buffer, particles_ptr, (NUM_PARTICLES * particle_size) / 4);
+            
+            // Tambahkan event listener untuk mouse
+            canvas.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                // Opsional: inisialisasi ulang partikel untuk menyesuaikan ukuran baru
+            });
+            
+            // Mulai loop animasi
+            animate();
+        }
+
+        function animate() {
+            // Panggil fungsi pembaruan dari WASM
+            wasm_instance.exports.update_particles(mouseX, mouseY);
+            
+            // Bersihkan kanvas
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Jejak buram
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Menggambar partikel
+            drawParticles();
+            
+            // Gambar koneksi antar partikel
+            drawConnections();
+            
+            requestAnimationFrame(animate);
+        }
+        
+        function drawParticles() {
+            const particle_data = particles_view;
+            const PARTICLE_FLOATS = particle_size / 4; // Ukuran partikel dalam float
+            
+            for (let i = 0; i < NUM_PARTICLES; ++i) {
+                const offset = i * PARTICLE_FLOATS;
+                const x = particle_data[offset];
+                const y = particle_data[offset + 1];
+                const r = particle_data[offset + 5];
+                
+                // Warna dari memori WASM
+                const colorR = new Uint8Array(wasm_instance.exports.memory.buffer, particles_ptr + i * particle_size + 8, 1)[0];
+                const colorG = new Uint8Array(wasm_instance.exports.memory.buffer, particles_ptr + i * particle_size + 9, 1)[0];
+                const colorB = new Uint8Array(wasm_instance.exports.memory.buffer, particles_ptr + i * particle_size + 10, 1)[0];
+
+                ctx.beginPath();
+                ctx.arc(x, y, r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgb(${colorR}, ${colorG}, ${colorB})`;
+                ctx.fill();
+            }
+        }
+        
+        function drawConnections() {
+            const particle_data = particles_view;
+            const PARTICLE_FLOATS = particle_size / 4;
+            const CONNECTION_DISTANCE = 100; // Harus sama dengan konstanta di C
+            
+            for (let i = 0; i < NUM_PARTICLES; ++i) {
+                const x1 = particle_data[i * PARTICLE_FLOATS];
+                const y1 = particle_data[i * PARTICLE_FLOATS + 1];
+                
+                for (let j = i + 1; j < NUM_PARTICLES; ++j) {
+                    const x2 = particle_data[j * PARTICLE_FLOATS];
+                    const y2 = particle_data[j * PARTICLE_FLOATS + 1];
+                    
+                    const dx = x1 - x2;
+                    const dy = y1 - y2;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < CONNECTION_DISTANCE) {
+                        ctx.beginPath();
+                        ctx.moveTo(x1, y1);
+                        ctx.lineTo(x2, y2);
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${1 - dist / CONNECTION_DISTANCE})`;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
