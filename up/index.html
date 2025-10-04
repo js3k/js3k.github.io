@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Update fileList.html & upload</title>
+<link rel="stylesheet" href="style.css">
+  <style>
+*{margin:0;padding:0;}
+:root,body{width:100vw;height:100vh;font-size:16px; font-family: sans-serif; background: #f0f0f0; }
+#log { white-space: pre-wrap; overflow:scroll;margin-top: 20px; background: #fff; padding: 10px; border-radius: 5px; }
+.flex{display:flex;margin:10px;}
+button{flex:0.5; width:100%;padding: 5px; font-size: 16px; }
+input,textarea{flex:2; 
+width:100%;padding: 5px; font-size: 16px; 
+border: 1px solid grey;
+}
+textarea{display:none}
+h2{margin:10px; margin-top:20px;}
+</style>
+</head>
+<body>
+<h1><a href="/">Upload & Update</a></h1>
+</header>
+<div class="container">
+<main>
+<section>
+<article>
+<h2>🔄 Update fileList</h2>
+<button id="updateBtn">Update</button>
+<br><br>
+<h2>📤 Upload File ke GitHub</h2>
+  <input type="file" id="svgUpload" multiple />
+  <br>
+  	<br>
+  <button id="uploadBtn">Upload</button>
+<div id="log">Klik tombol untuk mulai update. atau upload</div>
+<textarea id="html">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="id"&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"&gt;
+&lt;title&gt;js3k.github.io&lt;/title&gt;
+&lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;header&gt;
+&lt;h1&gt;&lt;a href="/"&gt;js3k.github.io&lt;/a&gt;&lt;/h1&gt;
+&lt;/header&gt;
+&lt;div class="container"&gt;
+&lt;main&gt;
+&lt;section&gt;
+&lt;article&gt;
+&lt;svg viewBox="0 -30 350 660" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%"&gt;
+&lt;rect width="100%" height="100%" fill="white" /&gt;
+&lt;g stroke="#add8e6" stroke-width="1"&gt;
+&lt;line x1="0" y1="0" x2="350" y2="0" /&gt;
+&lt;line x1="0" y1="30" x2="350" y2="30" /&gt;
+&lt;line x1="0" y1="60" x2="350" y2="60" /&gt;
+&lt;line x1="0" y1="90" x2="350" y2="90" /&gt;
+&lt;line x1="0" y1="120" x2="350" y2="120" /&gt;
+&lt;line x1="0" y1="150" x2="350" y2="150" /&gt;
+&lt;line x1="0" y1="180" x2="350" y2="180" /&gt;
+&lt;line x1="0" y1="210" x2="350" y2="210" /&gt;
+&lt;line x1="0" y1="240" x2="350" y2="240" /&gt;
+&lt;line x1="0" y1="270" x2="350" y2="270" /&gt;
+&lt;line x1="0" y1="300" x2="350" y2="300" /&gt;
+&lt;line x1="0" y1="330" x2="350" y2="330" /&gt;
+&lt;line x1="0" y1="360" x2="350" y2="360" /&gt;
+&lt;line x1="0" y1="390" x2="350" y2="390" /&gt;
+&lt;line x1="0" y1="420" x2="350" y2="420" /&gt;
+&lt;line x1="0" y1="450" x2="350" y2="450" /&gt;
+&lt;line x1="0" y1="480" x2="350" y2="480" /&gt;
+&lt;line x1="0" y1="510" x2="350" y2="510" /&gt;
+&lt;line x1="0" y1="540" x2="350" y2="540" /&gt;
+&lt;line x1="0" y1="570" x2="350" y2="570" /&gt;
+&lt;line x1="0" y1="600" x2="350" y2="600" /&gt;
+&lt;/g&gt;
+&lt;line x1="40" y1="0" x2="40" y2="600" stroke="red" stroke-width="1" /&gt;
+&lt;text x="50" y="508" font-family="normal" font-size="120" font-weight="bold" fill="rgba(0,0,0,0.1)"&gt;JS3K&lt;/text&gt;
+&lt;text x="50" y="24" font-family="monospace" font-size="16" fill="rgba(0,0,0,0.8)"&gt;Welcome to js3k.github.io !&lt;/text&gt;
+&lt;text visibility="hidden" x="50" y="54" font-family="monospace" font-size="16" fill="rgba(0,0,0,0.8)"&gt;I am fine, how about you ?
+&lt;set begin="move2.end" attributeType="auto" attributeName="visibility" to="visible" /&gt;
+&lt;set begin="move6.end" attributeType="auto" attributeName="visibility" to="hidden" /&gt;
+&lt;/text&gt;
+&lt;text visibility="hidden" x="50" y="84" font-family="monospace" font-size="16" fill="rgba(0,0,0,0.8)"&gt;Great. Let's go to ...
+&lt;set begin="move4.end" attributeType="auto" attributeName="visibility" to="visible" /&gt;
+&lt;set begin="move6.end" attributeType="auto" attributeName="visibility" to="hidden" /&gt;
+&lt;/text&gt;
+&lt;g id="cursor"&gt;
+&lt;rect x="50" y="9" width="1" height="20" fill="#000"&gt;
+&lt;animate id="blink1" begin="1; move6.end" attributeType="auto" attributeName="fill" to="#fff" dur="0.5s" repeatCount="3" /&gt;
+&lt;animate id="blink2" begin="move1.end" attributeType="auto" attributeName="fill" to="#fff" dur="0.5s" repeatCount="3" /&gt;
+&lt;animate id="blink3" begin="move2.end" attributeType="auto" attributeName="fill" to="#fff" dur="0.5s" repeatCount="3" /&gt;
+&lt;animate id="blink4" begin="move3.end" attributeType="auto" attributeName="fill" to="#fff" dur="0.5s" repeatCount="3" /&gt;
+&lt;animate id="blink5" begin="move4.end" attributeType="auto" attributeName="fill" to="#fff" dur="0.5s" repeatCount="3" /&gt;
+&lt;animate id="blink6" begin="move5.end" attributeType="auto" attributeName="fill" to="#fff" dur="0.5s" repeatCount="3" /&gt;
+&lt;set begin="move2.begin" attributeType="auto" attributeName="y" to="39" fill="freeze" /&gt;
+&lt;set begin="move4.begin" attributeType="auto" attributeName="y" to="69" fill="freeze" /&gt;
+&lt;set begin="move6.begin" attributeType="auto" attributeName="y" to="9" fill="freeze" /&gt;
+&lt;/rect&gt;
+&lt;rect x="51" y="9" width="400" height="20" fill="#fff"&gt;
+&lt;set begin="move2.begin" attributeType="auto" attributeName="y" to="39" fill="freeze" /&gt;
+&lt;set begin="move4.begin" attributeType="auto" attributeName="y" to="69" fill="freeze" /&gt;
+&lt;set begin="move6.begin" attributeType="auto" attributeName="y" to="9" fill="freeze" /&gt;
+&lt;/rect&gt;
+&lt;animateTransform id="move1" begin="blink1.end" attributeName="transform" type="translate" from="0,0" to="9.6,0" dur="0.10s" accumulate="sum" calcMode="discrete" repeatCount="27" fill="freeze" /&gt;
+&lt;animateTransform id="move2" begin="blink2.end" attributeName="transform" type="translate" from="456,0" to="0,0" dur="0.10s" fill="freeze" /&gt;
+&lt;animateTransform id="move3" begin="blink3.end" attributeName="transform" type="translate" from="0,0" to="9.6,0" dur="0.10s" accumulate="sum" calcMode="discrete" repeatCount="26" fill="freeze" /&gt;
+&lt;animateTransform id="move4" begin="blink4.end" attributeName="transform" type="translate" from="456,0" to="0,0" dur="0.10s" fill="freeze" /&gt;
+&lt;animateTransform id="move5" begin="blink5.end" attributeName="transform" type="translate" from="0,0" to="9.6,0" dur="0.10s" accumulate="sum" calcMode="discrete" repeatCount="22" fill="freeze" /&gt;
+&lt;animateTransform id="move6" begin="blink6.end" attributeName="transform" type="translate" from="456,0" to="0,0" dur="0.10s" fill="freeze" /&gt;
+&lt;/g&gt;&lt;/svg&gt;
+&lt;/article&gt;
+&lt;/section&gt;
+&lt;aside&gt;
+&lt;h3&gt;Semua Artikel&lt;/h3&gt;
+&lt;ul&gt;
+</textarea>
+<script>
+const head = document.getElementById("html").value;
+const footer = `</ul>
+</aside>
+</main>
+</div>
+<footer>
+&copy; 2025  by Andi.
+</footer>
+</body>
+</html>`;
+const token = "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"; // Ganti dengan token GitHub kamu
+const repo = "js3k/js3k.github.io";
+const folder = "post";
+const manifestPath = `index.html`;
+const apiUrl = `https://api.github.com/repos/${repo}/contents/${manifestPath}`;
+const folderUrl = `https://api.github.com/repos/${repo}/contents/${folder}`;
+document.getElementById("updateBtn").onclick = async () => {
+const log = document.getElementById("log");
+log.textContent = "⏳ Mengambil isi folder...";
+try {
+const res = await fetch(folderUrl, {
+headers: { Authorization: `token ${token}` }
+});
+const files = await res.json();
+const filtered = files;
+const fileDates = await Promise.all(filtered.map(async f => {
+const commitRes = await fetch(`https://api.github.com/repos/${repo}/commits?path=${folder}/${f.name}&per_page=1`, {
+headers: { Authorization: `token ${token}` }
+});
+const commitData = await commitRes.json();
+const date = new Date(commitData[0]?.commit?.committer?.date || 0);
+return { name: f.name, date };
+}));
+const liList = fileDates
+.sort((a, b) => b.date - a.date)
+.map(f => `<li><a href="${folder}/${f.name}">${f.name}</a></li>`)
+.join("\n");
+const fullHtml = head + "\n" + liList + "\n" + footer;
+const encoded = btoa(unescape(encodeURIComponent(fullHtml)));
+log.textContent += `\n✅ Ditemukan ${fileDates.length} file .html.\n⏳ Mengambil SHA...`;
+const shaRes = await fetch(apiUrl, {
+headers: { Authorization: `token ${token}` }
+});
+const existing = await shaRes.json();
+const sha = existing.sha;
+log.textContent += `\n✅ SHA: ${sha}\n⏳ Mengirim update...`;
+const updateRes = await fetch(apiUrl, {
+method: "PUT",
+headers: {
+Authorization: `token ${token}`,
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+message: "Update fileList.html via panel",
+content: encoded,
+sha: sha
+})
+});
+const result = await updateRes.json();
+log.textContent += `\n✅ fileList.html berhasil diupdate!\n🔗 Commit: ${result.commit.sha}`;
+setInterval(() => {log.textContent = "";}, 6000);
+} catch (err) {
+log.textContent += `\n❌ Error: ${err.message}`;
+console.error(err);
+}
+};
+
+let selectedFiles = [];
+function arrayBufferToBase64(buffer) {
+let binary = '';
+const bytes = new Uint8Array(buffer);
+const chunkSize = 0x8000;
+for (let i = 0; i < bytes.length; i += chunkSize) {
+binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+}
+return btoa(binary);
+}
+async function uploadFile(file, log) {
+const isTextFile = /^text\/|\/json$|\/javascript$|\/xml$/.test(file.type) || /\.(txt|html|css|js|json|md)$/i.test(file.name);
+log.textContent += `\n⏳ Memuat ${file.name}...`;
+const reader = new FileReader();
+const fileContent = await new Promise((resolve, reject) => {
+reader.onload = () => resolve(reader.result);
+reader.onerror = () => reject(reader.error);
+isTextFile ? reader.readAsText(file) : reader.readAsArrayBuffer(file);
+}).catch(err => {
+log.textContent += `\n❌ Gagal membaca ${file.name}: ${err.message}`;
+return null;
+});
+if (!fileContent) return;
+let encoded;
+try {
+encoded = isTextFile
+? btoa(unescape(encodeURIComponent(fileContent)))
+: arrayBufferToBase64(fileContent);
+} catch (err) {
+log.textContent += `\n❌ Gagal encode ${file.name}: ${err.message}`;
+return;
+}
+const uploadUrl = `https://api.github.com/repos/${repo}/contents/${folder}/${file.name}`;
+let sha = null;
+try {
+const res = await fetch(uploadUrl, {
+headers: { Authorization: `token ${token}` }
+});
+if (res.ok) {
+const data = await res.json();
+sha = data.sha;
+log.textContent += `\n📄 File lama ditemukan, akan di-replace.`;
+} else {
+log.textContent += `\n🆕 File belum ada, akan dibuat baru.`;
+}
+} catch (err) {
+log.textContent += `\n⚠️ Gagal cek file lama: ${err.message}`;
+}
+log.textContent += `\n🚀 Uploading ${file.name}...`;
+try {
+const res = await fetch(uploadUrl, {
+method: "PUT",
+headers: {
+Authorization: `token ${token}`,
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+message: `Upload ${file.name} via HTML panel`,
+content: encoded,
+...(sha && { sha })
+})
+});
+const result = await res.json();
+if (res.ok) {
+log.textContent += `\n✅ Uploaded ${file.name}!\nCommit: ${result.commit.sha}`;
+} else {
+log.textContent += `\n❌ Gagal upload ${file.name}: ${result.message}`;
+}
+} catch (err) {
+log.textContent += `\n❌ Error saat upload ${file.name}: ${err.message}`;
+}
+}
+document.getElementById("svgUpload").onchange = (e) => {
+selectedFiles = Array.from(e.target.files);
+const log = document.getElementById("log");
+if (!selectedFiles.length) {
+log.textContent = "❌ Tidak ada file terdeteksi dari file picker.";
+return;
+}
+log.textContent = `🔄 ${selectedFiles.length} file dipilih:\n`;
+for (const file of selectedFiles) {
+log.textContent += `📁 ${file.name} (${file.size} bytes)\n`;
+}
+};
+document.getElementById("uploadBtn").onclick = async () => {
+const log = document.getElementById("log");
+if (!selectedFiles || selectedFiles.length === 0) {
+log.textContent = "❌ Pilih file dulu beb.";
+return;
+}
+log.textContent += `\n🚀 Mulai upload ${selectedFiles.length} file...\n`;
+for (const file of selectedFiles) {
+await uploadFile(file, log);
+setInterval(() => {log.textContent = "";}, 6000);
+await new Promise(resolve => setTimeout(resolve, 300)); // Delay opsional
+}
+};
+  </script>
+</article>
+</section>
+<aside>
+<iframe src='https://js3k.github.io/' style='width:100%;height:100vh;border:none;'></iframe>
+</aside>
+</main>
+</div>
+<footer>
+&copy; 2025  by Andi.
+</footer>
+</body>
+</html>
