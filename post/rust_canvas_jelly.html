@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+  <title>Canvas Jelly WASM</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      font-family: sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    canvas {
+      display: block;
+      border: 1px solid #444;
+      margin-top: 10px;
+    }
+    .controls {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+<input id="circle-slider" type="range" min="1" max="200" value="10" />
+        <label for="circle-slider"> Lingkaran: </label>
+    <span id="circle-count">10</span>
+  </div>
+  <canvas id="canvas"></canvas>
+
+  <script type="module">
+    import init, { init_canvas, set_circle_count } from "./rust_canvas_jelly.js";
+
+init().then(() => {
+  init_canvas(); // hanya sekali
+  const slider = document.getElementById("circle-slider");
+  const countDisplay = document.getElementById("circle-count");
+
+  set_circle_count(parseInt(slider.value));
+  slider.addEventListener("input", () => {
+    countDisplay.textContent = slider.value;
+    set_circle_count(parseInt(slider.value));
+  });
+});
+  </script>
+</body>
+</html>
