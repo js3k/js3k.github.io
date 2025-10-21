@@ -203,11 +203,11 @@ Isi kode ini di .bashrc
 <pre>
 # Tambahkan ke ~/.bashrc di Termux
 
-msb() {
+run() {
   echo ">> Login ke ubuntu + bind /app"
   proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
   echo ">> Menjalan kan dengan dotnet run"
-  cd /app || exit
+  cd ~/app || exit
   export DOTNET_GCHeapHardLimit=0xC800000
   export COMPlus_EnableDiagnostics=0
   dotnet run
@@ -270,8 +270,10 @@ restart server .bashrc
 </div>
 <p class="pre">
 Ada beberapa Fungsi Shortcut dari .bashrc....
-1. cpapp > untuk menyalin folder app ke penyimpanan perangkat...
-2. msb > untuk build project, selalu ketik msb lalu enter setiap selesai mengubah file program.cs...
+1. run > untuk menjalan kan project di folder app di dalam aplikasi termux..
+
+2. cpapp > untuk menyalin folder app dari penyimpanan app termux ke local storage..
+
 3. dll > untuk menjalan kan debuging atau menjalan kan project, di localhost. 
 ketik dll lalu enter setelah selesai build, lalu kunjungi di browser http://127.0.0.1:5000 atau http://localhost:5000
 4. netpub > untuk publish project.. hasil publish ada di folder app/publish tengok di memori perangkat dengan x plore..
