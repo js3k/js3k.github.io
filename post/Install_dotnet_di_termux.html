@@ -202,35 +202,58 @@ Isi kode ini di .bashrc
 <div class="cd">
 <pre>
 # Tambahkan ke ~/.bashrc di Termux
-
-run() {
-  echo ">> Login ke ubuntu + bind /app"
-  proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
-  echo ">> Menjalan kan dengan dotnet run"
-  cd ~/app || exit
+runawal() {
+  echo ">> Login ke ubuntu"
+  proot-distro login ubuntu <<EOF
+  echo ">> Masuk ke folder app di termux."
+  cd /app || exit
   export DOTNET_GCHeapHardLimit=0xC800000
   export COMPlus_EnableDiagnostics=0
+  echo ">>Run & build app"
   dotnet run
+  echo ">> Ketik cpapp untuk menyalin folder ke lokal"
 EOF
 }
 
-cpw() {
+cpapp() {
   echo ">> Login ke ubuntu + bind /app"
   proot-distro login ubuntu --bind /storage/emulated/0:/app <<EOF
   echo ">> Copy file project dari app ke web"
   cp -r app/ /app
+  echo ">> Folder di salin. Buka file manager cari folder app"
 EOF
 }
 
 run() {
   echo ">> Login ke ubuntu + bind /app"
-   proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
-  echo ">> Build project dengan dotnet..."
+  proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
+  echo ">> Menjalan kan dengan dotnet build"
   cd /app || exit
   export DOTNET_GCHeapHardLimit=0xC800000
   export COMPlus_EnableDiagnostics=0
-  echo ">> Dotnet run..."
   dotnet build
+EOF
+}
+
+dll() {
+  echo ">> Login ke ubuntu + bind /app"
+  proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
+  echo ">> Menjalan kan dengan dotnet run"
+  cd /app || exit
+  export DOTNET_GCHeapHardLimit=0xC800000
+  export COMPlus_EnableDiagnostics=0
+  dotnet /app/bin/Debug/net8.0/app.dll
+EOF
+}
+
+runs() {
+  echo ">> Login ke ubuntu + bind /app"
+  proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
+  echo ">> Menjalan kan dengan dotnet run"
+  cd /app || exit
+  export DOTNET_GCHeapHardLimit=0xC800000
+  export COMPlus_EnableDiagnostics=0
+  dotnet run
 EOF
 }
 
@@ -262,6 +285,7 @@ wpub() {
   echo "✅ Publish selesai!"
 EOF
 }
+
 </pre>
 </div>
 restart server .bashrc
@@ -270,22 +294,33 @@ restart server .bashrc
 </div>
 <p class="pre">
 Ada beberapa Fungsi Shortcut dari .bashrc....
-1. run > untuk menjalan kan project di folder app di dalam aplikasi termux..
+1. runawal > untuk menjalan kan project di folder app di dalam aplikasi termux jalan kan hanya kali pertama kalau app belum pernah di run..
 
 2. cpapp > untuk menyalin folder app dari penyimpanan app termux ke local storage..
 
-3. dll > untuk menjalan kan debuging atau menjalan kan project, di localhost. 
-ketik dll lalu enter setelah selesai build, lalu kunjungi di browser http://127.0.0.1:5000 atau http://localhost:5000
-4. netpub > untuk publish project.. hasil publish ada di folder app/publish tengok di memori perangkat dengan x plore..
+🏁
+3. run > untuk menerap kan perubahan setelah kita mengedit program.cs membangun website dan lain lain,
+setelah mengedit program cs selalu gunakan run untuk menyimpan ke project aktif/menerap kan perubahan
+
+3. dll > untuk menjalan kan server, debuging atau menjalan kan project, di localhost. 
+ketik dll lalu enter setelah jala,
+lalu kunjungi di browser <a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a> atau <a href="http://localhost:5000">http://localhost:5000</a>
+🏁
+
+4. pub > Publish project untuk di upload ke hosting .. hasil publish ada di folder app/publish tengok di memori perangkat dengan x plore..
+
 5. winpub > untuk publish project dengan selfcontained. tapi ukuran lebih besar namun tidak tergantung pada runtim server...
 
 untuk memulai ketik cpapp di termux, lalu enter. klo proses nya selesai.
 buka aplikasi x-plore buka internal storage cari folder app, buka file program.cs dengan quick edit+ untuk mengedit...
 setelah selesai klik simpan di dalam editor quick edit+ 
-minimal kan buka termux klik msb lalu enter tunggu proses selesai....
+minimal kan buka termux klik run lalu enter tunggu proses selesai....
 kalo udah selesai klik dll untuk menjalan kan di localhost... kunjungi http://127.0.0.1:5000 atau http://localhost:5000 di browser. 
 klo udah sesuai project nya.  klik ctrl+c untuk stop server...
-ketik netpub untuk publish, hasil publish ada di folder app/publish upload ke hosting semua isi file dari folder [ publish ].....
+ketik pub untuk publish, hasil publish ada di folder app/publish upload ke hosting semua isi file dari folder [ publish ].....
+
+ingat untuk menerap kan perubahan setelah mengedit project di folder app di local storage. selalu gunakan run di trmux dan dll untuk menjalan kan hasil lalu buka di browser <a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a> jreng perubahan akan tampil. untuk stop server di termux ketik ctrl+c  
+
 </p>
 </div>
 </article>
