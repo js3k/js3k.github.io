@@ -150,9 +150,36 @@ Download .NET:
 Kalau info sudah lengkap seperti di atas, sekarang tinggal test buat web minimal api, ketik kan ini:
 <div class="cd">
 <pre>dotnet new web -o app </pre>
-</div><p class="pre">kalau udah selesai proses nya 100%...
-untuk memasti kan folder app sudah terbuat,
-ketik ls lalu enter..
+</div>
+lalu masuk ke folder app
+<div class="cd">
+<pre>cd app</pre>
+</div>
+Setelah berada di folder app ketik ini
+<div class="cd">
+<pre>dotnet run</pre>
+</div>
+<p class="pre">
+Tunggu proses sampai selesai. sampai muncul seperti ini..
+root@localhost:~/app# dotnet run
+Building...
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5249
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /root/app
+kalau udah selesai. berarti server net udah jalan. sobat bisa buka url di ststus
+termux nya Dibawah Now listening on: 
+Contoh . . . .
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5249
+
+kalau udah bisa di buka di browser berarri udah jalan.. 
+silah kan close server net yang jalan. dengan klik ctrl+c untuk menghentikan server...  lalu ketik exit di terminal agar keluar dari proot ubuntu dan kembali ke home termux.
+
 sampai sini sebenar nya udah selesai. 
 namun untuk mempermudah dalam membangun project,
 kita membutuh kan run build dll di memori perngkat  ok sekarang
@@ -171,38 +198,41 @@ edit file .bashrc dengan cara:</p>
 
 Isi kode ini di .bashrc
 <div class="cd">
-<pre> cpapp() {
-  echo ">> Login ke ubuntu + bind /app"
-  proot-distro login ubuntu --bind /storage/emulated/0:/app <<EOF
-  echo ">> Copy file project dari app ke app"
-  cp -r app/ /app/
-EOF
-}
+<pre>
+# Tambahkan ke ~/.bashrc di Termux
 
 msb() {
   echo ">> Login ke ubuntu + bind /app"
   proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
-  echo ">> Build project dengan MSBuild"
+  echo ">> Menjalan kan dengan dotnet run"
   cd /app || exit
   export DOTNET_GCHeapHardLimit=0xC800000
   export COMPlus_EnableDiagnostics=0
-  dotnet build
+  dotnet run
 EOF
 }
 
-dll() {
+cpw() {
+  echo ">> Login ke ubuntu + bind /app"
+  proot-distro login ubuntu --bind /storage/emulated/0:/app <<EOF
+  echo ">> Copy file project dari app ke web"
+  cp -r app/ /app
+EOF
+}
+
+run() {
   echo ">> Login ke ubuntu + bind /app"
    proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
   echo ">> Build project dengan dotnet..."
   cd /app || exit
   export DOTNET_GCHeapHardLimit=0xC800000
   export COMPlus_EnableDiagnostics=0
-  echo ">> Menjalankan file DLL..."
-  dotnet bin/Debug/net8.0/app.dll
+  echo ">> Dotnet run..."
+  dotnet build
 EOF
 }
 
-netpub() {
+pub() {
   echo ">> Login ke Ubuntu + bind /pub"
   proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
   echo ">> Publish project ke app/publish/"
@@ -214,14 +244,19 @@ netpub() {
 EOF
 }
 
-winpub() {
+wpub() {
   echo ">> Login ke Ubuntu + bind /pub"
-  proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
-  echo ">> Publish project ke app/publish/"
-  cd /app || exit
+  proot-distro login ubuntu --bind /storage/emulated/0:/pub <<EOF
+  echo ">> Masuk ke folder ~/web"
+  cd ~/web || { echo "Folder ~/web tidak ditemukan"; exit 1; }
+  echo ">> Publish project ke ~/appub"
   export DOTNET_GCHeapHardLimit=0xC800000
   export COMPlus_EnableDiagnostics=0
-  dotnet publish -c Release -r win-x86 --self-contained -o ./publish/
+  dotnet publish -c Release -r win-x86 --self-contained -o ~/publish/
+  echo ">> Mundur ke root sebelum cd ../"
+  cd ~
+  echo ">> Copy hasil publish ke appub "
+  mv publish/ /pub/
   echo "✅ Publish selesai!"
 EOF
 }
