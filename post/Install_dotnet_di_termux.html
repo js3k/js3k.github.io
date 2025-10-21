@@ -246,17 +246,6 @@ dll() {
 EOF
 }
 
-runs() {
-  echo ">> Login ke ubuntu + bind /app"
-  proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
-  echo ">> Menjalan kan dengan dotnet run"
-  cd /app || exit
-  export DOTNET_GCHeapHardLimit=0xC800000
-  export COMPlus_EnableDiagnostics=0
-  dotnet run
-EOF
-}
-
 pub() {
   echo ">> Login ke Ubuntu + bind /pub"
   proot-distro login ubuntu --bind /storage/emulated/0/app:/app <<EOF
